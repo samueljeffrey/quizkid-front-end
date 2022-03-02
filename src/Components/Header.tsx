@@ -1,9 +1,34 @@
 import React from "react";
 
-export const Header = () => {
+interface Props {
+  setCategory: () => void;
+}
+
+export const Header: React.FC = () => {
+  const categories: string[] = [
+    "All",
+    "Film & TV",
+    "Geography",
+    "History",
+    "Languages",
+    "Literature",
+    "Maths",
+    "Music",
+    "Science",
+    "Society",
+    "Sport",
+    "Other",
+  ];
+
   return (
     <div>
-      <h1>Header Section</h1>
+      <div>
+        <img src="../../public/images/quizkid-logo.png" alt="quizkid logo" />
+        <h1>Quizkid</h1>
+        {categories.map((category) => {
+          return <h3>{category}</h3>;
+        })}
+      </div>
     </div>
   );
 };
