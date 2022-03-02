@@ -8,6 +8,6 @@ export const getQuizzes = (category?: string) => {
   let path: string = "/quizzes";
   if (category !== "All") path += `?category=${category}`;
   return api.get(path).then((response) => {
-    return response;
+    return response.data;
   });
 };
