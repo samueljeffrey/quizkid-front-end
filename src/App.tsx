@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect, useContext } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Header } from "./Components/Header";
 import { QuizList } from "./Components/QuizList";
@@ -8,12 +8,14 @@ import { CreateQuiz } from "./Components/CreateQuiz";
 import { ErrorPage } from "./Components/ErrorPage";
 
 function App() {
+  const [category, setCategory] = useState("All");
+
   return (
     <BrowserRouter>
       <div className="App">
         <Header />
         <Routes>
-          <Route path="/" element={<QuizList />} />
+          <Route path="/" element={<QuizList category={category} />} />
           <Route path="/quizzes/:article_id" element={<PlayQuiz />} />
           <Route path="/create-quiz" element={<CreateQuiz />} />
           <Route path="*" element={<ErrorPage />} />

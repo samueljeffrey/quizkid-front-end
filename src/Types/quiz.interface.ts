@@ -1,6 +1,6 @@
 export interface Quiz {
   _id: string;
-  name: string;
+  title: string;
   category: string;
   instructions: string[];
   creator: string;

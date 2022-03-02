@@ -8,8 +8,7 @@ interface Props {
 export const SingleQuiz: React.FC<Props> = ({ details }) => {
   return (
     <div>
-      <h1>SingleQuiz item</h1>
-      <h2>{details.name}</h2>
+      <h2>{details.title}</h2>
     </div>
   );
 };
