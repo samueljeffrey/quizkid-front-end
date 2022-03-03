@@ -8,14 +8,22 @@ export const QuizList: React.FC<{ category: string }> = ({ category }) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   useEffect(() => {
+    console.log(`category is now ${category}`);
     getQuizzes(category).then((response) => {
       setQuizzes(response.data);
+      console.log(`just fetched ${category} quizzes`);
     });
   }, [category]);
 
   return (
     <div>
-      <h1>QuizList page</h1>
+      {/* Setting the heading based on chosen category filter */}
+      {category === "All" || category === "Other" ? (
+        <h1>Find a Quiz</h1>
+      ) : (
+        <h1>Find a {category} Quiz</h1>
+      )}
+      {/* Listing the quizzes fitting the chosen category filter */}
       {quizzes.length === 0 ? (
         <p>No quizzes found</p>
       ) : (

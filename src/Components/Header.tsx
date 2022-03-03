@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface Props {
-  setCategory: () => void;
+  setCategory: (choice: string) => void;
 }
 
-export const Header: React.FC = () => {
+export const Header: React.FC<Props> = ({ setCategory }) => {
   const categories: string[] = [
     "All",
     "Film & TV",
@@ -19,15 +20,33 @@ export const Header: React.FC = () => {
     "Sport",
     "Other",
   ];
+  const [opened, setOpened] = useState(false);
 
   return (
     <div>
       <div>
         <img src="../../public/images/quizkid-logo.png" alt="quizkid logo" />
         <h1>Quizkid</h1>
-        {categories.map((category) => {
-          return <h3>{category}</h3>;
-        })}
+        {opened ? (
+          categories.map((category) => {
+            return (
+              <Link
+                className=""
+                to="/"
+                key={category}
+                onClick={() => {
+                  setOpened(false);
+                  console.log(`just before ${category} set`);
+                  setCategory(category);
+                }}
+              >
+                {category}
+              </Link>
+            );
+          })
+        ) : (
+          <button onClick={() => setOpened(true)}>Categories</button>
+        )}
       </div>
     </div>
   );
