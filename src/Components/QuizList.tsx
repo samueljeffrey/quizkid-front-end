@@ -15,7 +15,9 @@ export const QuizList: React.FC<{ category: string }> = ({ category }) => {
 
   return (
     <div>
-      <h1>QuizList page</h1>
+      {/* Setting the heading based on chosen category filter */}
+      <h1>{category} Quizzes</h1>
+      {/* Listing the quizzes fitting the chosen category filter */}
       {quizzes.length === 0 ? (
         <p>No quizzes found</p>
       ) : (
