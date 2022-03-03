@@ -11,3 +11,9 @@ export const getQuizzes = (category?: string) => {
     return response.data;
   });
 };
+
+export const getQuiz = (id?: string) => {
+  return api.get(`/quizzes/${id}`).then((response) => {
+    return response.data;
+  });
+};
