@@ -25,7 +25,10 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
   return (
     <div>
       <div>
-        <img src="../Images/quizkid-logo" alt="quizkid logo" />
+        <img
+          src="https://i.postimg.cc/NMxRsSNJ/quizkid-logo.png"
+          alt="quizkid logo"
+        />
         <Link to="/">
           <h1>Quizkid</h1>
         </Link>
