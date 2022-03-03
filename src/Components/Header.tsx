@@ -25,29 +25,34 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
   return (
     <div>
       <div>
-        <img src="../../public/images/quizkid-logo.png" alt="quizkid logo" />
-        <h1>Quizkid</h1>
-        {opened ? (
-          categories.map((category) => {
-            return (
-              <Link
-                className=""
-                to="/"
+        <img src="../Images/quizkid-logo" alt="quizkid logo" />
+        <Link to="/">
+          <h1>Quizkid</h1>
+        </Link>
+      </div>
+      {opened ? (
+        categories.map((category) => {
+          return (
+            <Link to="/" key={`link-${category}`}>
+              <button
                 key={category}
                 onClick={() => {
                   setOpened(false);
-                  console.log(`just before ${category} set`);
                   setCategory(category);
                 }}
               >
                 {category}
-              </Link>
-            );
-          })
-        ) : (
-          <button onClick={() => setOpened(true)}>Categories</button>
-        )}
-      </div>
+              </button>
+            </Link>
+          );
+        })
+      ) : (
+        <button onClick={() => setOpened(true)}>Categories</button>
+      )}
+      {opened ? <button onClick={() => setOpened(false)}>Close</button> : null}
+      <Link to="/create">
+        <button onClick={() => setOpened(false)}>Create</button>
+      </Link>
     </div>
   );
 };

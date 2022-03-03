@@ -7,9 +7,14 @@ const api = axios.create({
 export const getQuizzes = (category?: string) => {
   let path: string = "/quizzes";
   if (category && category !== "All") path += `?category=${category}`;
-  return api.get(path).then((response) => {
-    return response.data;
-  });
+  return api
+    .get(path)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(() => {
+      return { data: [] };
+    });
 };
 
 export const getQuiz = (id?: string) => {
