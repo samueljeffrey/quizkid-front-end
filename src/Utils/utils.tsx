@@ -36,3 +36,7 @@ export const dateSlicer = (date: string) => {
   output += `${date.slice(0, 4)}`;
   return output;
 };
+
+export const simplify = (input: string) => {
+  return input.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
+};

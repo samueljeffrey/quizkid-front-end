@@ -10,7 +10,7 @@ export interface Quiz {
   average: number;
   quizId: string;
   created: string;
-  __v?: number;
+  __v: number;
 }
 
 export interface Question {

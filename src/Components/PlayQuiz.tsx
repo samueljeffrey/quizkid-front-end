@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getQuiz, patchQuiz, dateSlicer } from "../Utils/utils";
+import { getQuiz, patchQuiz, dateSlicer, simplify } from "../Utils/utils";
 import { Quiz, Question } from "..//Types/quiz.interface";
 
 export const PlayQuiz: React.FC = () => {
@@ -47,17 +47,9 @@ export const PlayQuiz: React.FC = () => {
     const array = [...guessed];
     quiz?.questions.forEach((item) => {
       let valid = false;
-      if (
-        text.toLowerCase().replaceAll(" ", "") ===
-        item.correct.toLowerCase().replaceAll(" ", "")
-      )
-        valid = true;
+      if (simplify(text) === simplify(item.correct)) valid = true;
       for (let j = 0; j < item.accepted.length; j++) {
-        if (
-          text.toLowerCase().replaceAll(" ", "") ===
-          item.accepted[j].toLowerCase().replaceAll(" ", "")
-        )
-          valid = true;
+        if (simplify(text) === simplify(item.accepted[j])) valid = true;
       }
       if (valid && array.indexOf(item) === -1) {
         array.push(item);
