@@ -39,7 +39,7 @@ export const PlayQuiz: React.FC = () => {
     const newPlays: number = quiz.plays + 1;
     const toAdd = done ? 100 : (guessed.length / quiz.questions.length) * 100;
     const newAverage = (quiz.average * quiz.plays + toAdd) / newPlays;
-    if (quizId) patchQuiz(quizId, newPlays, newAverage);
+    if (quizId) patchQuiz(quizId, newPlays, Math.round(newAverage));
   };
 
   const evaluateText = (e: { target: { value: string } }) => {
@@ -89,7 +89,7 @@ export const PlayQuiz: React.FC = () => {
             <div>
               <h2>
                 Score:{" "}
-                {((guessed.length / quiz.questions.length) * 100).toFixed(0)}%
+                {Math.round((guessed.length / quiz.questions.length) * 100)}%
               </h2>
               <h3>Average: {quiz.average}%</h3>
             </div>
