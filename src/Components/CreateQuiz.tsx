@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { postQuiz } from "../Utils/utils";
 
 interface Question {
   index: number;
@@ -92,10 +93,27 @@ export const CreateQuiz: React.FC = () => {
     if (errors.length === 0) {
       setBuilt(true);
       setAttempted(false);
+      buildQuiz();
     } else {
       setAttempted(true);
       setBuilt(false);
     }
+  };
+
+  const buildQuiz = () => {
+    const object = {
+      title,
+      creator,
+      category,
+      instructions,
+      seconds,
+      questions,
+    };
+    object.instructions = object.instructions.filter((item) => item !== "");
+    questions.forEach((question) => {
+      question.accepted = question.accepted.filter((item) => item !== "");
+    });
+    postQuiz(object);
   };
 
   useEffect(() => {

@@ -13,6 +13,15 @@ export interface Quiz {
   __v: number;
 }
 
+export interface NewQuiz {
+  title: string;
+  category: string;
+  instructions: string[];
+  creator: string;
+  questions: Question[];
+  seconds: number;
+}
+
 export interface Question {
   question: string;
   correct: string;
