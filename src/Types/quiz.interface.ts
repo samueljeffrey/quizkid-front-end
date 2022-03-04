@@ -17,5 +17,5 @@ export interface Question {
   question: string;
   correct: string;
   accepted: string[];
-  _id: string;
+  _id?: string;
 }
