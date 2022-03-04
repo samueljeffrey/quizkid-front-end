@@ -52,10 +52,10 @@ export const CreateQuiz: React.FC = () => {
   };
 
   const editInstructions = (text: string, index: number) => {
-    // const array = [...instructions];
-    // array[index] = text;
-    // console.log(array);
-    // setInstructions(array);
+    const array = [...instructions];
+    array[index] = text;
+    console.log(instructions);
+    setInstructions(array);
   };
 
   return (
@@ -114,7 +114,10 @@ export const CreateQuiz: React.FC = () => {
           will still appear exactly as you entered it in that field. This also
           means that you don't need to add variations of capitalised and
           uncapitalised answers to your "accepted" answers lists, only answers
-          with different spellings or different words.
+          with different spellings or different words. Furthermore, all
+          characters which aren't numbers or letters are removed during
+          gameplay, including apostrophes, so a player will be also correct if
+          they answer "Charlottes Web", rather than "Charlotte's Web".
         </p>
       </div>
 
@@ -182,8 +185,6 @@ export const CreateQuiz: React.FC = () => {
         })}
         <button onClick={() => addQuestion()}>Add Question</button>
       </div>
-      {/* <button onClick={()=>setPreview(true)}>Preview</button>
-      {preview?  : null} */}
     </div>
   );
 };
