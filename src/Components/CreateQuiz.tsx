@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface Question {
   index: number;
@@ -15,9 +15,11 @@ export const CreateQuiz: React.FC = () => {
     accepted: ["", "", "", ""],
   };
 
-  const [questions, setQuestions] = useState<Question[]>([emptyQuestion]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [instructions, setInstructions] = useState<string[]>(["", "", "", ""]);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [timeLimit, setTimeLimit] = useState<number>(0);
 
   const [title, setTitle] = useState<string>("");
 
@@ -51,12 +53,19 @@ export const CreateQuiz: React.FC = () => {
     setTitle(text);
   };
 
+  const editName = (text: string) => {
+    setName(text);
+  };
+
   const editInstructions = (text: string, index: number) => {
     const array = [...instructions];
     array[index] = text;
-    console.log(instructions);
     setInstructions(array);
   };
+
+  useEffect(() => {
+    addQuestion();
+  }, []);
 
   return (
     <div>
@@ -122,13 +131,65 @@ export const CreateQuiz: React.FC = () => {
       </div>
 
       <div>
-        <h3>Title:</h3>
-        <input onChange={(e) => editTitle(e.target.value)} />
-        <h3>Instructions:</h3>
-        <input onChange={(e) => editInstructions(e.target.value, 0)} />
-        <input onChange={(e) => editInstructions(e.target.value, 1)} />
-        <input onChange={(e) => editInstructions(e.target.value, 2)} />
-        <input onChange={(e) => editInstructions(e.target.value, 3)} />
+        <div>
+          <h3>Title:</h3>
+          <input onChange={(e) => editTitle(e.target.value)} />
+        </div>
+
+        <div>
+          <h3>Your Name:</h3>
+          <input onChange={(e) => editName(e.target.value)} />
+        </div>
+
+        <div>
+          <h3>Category:</h3>
+          <select
+            onChange={(e) => {
+              setCategory(e.target.value);
+            }}
+          >
+            <option value="Select">Select</option>
+            <option value="Film/TV">Film/TV</option>
+            <option value="Geography">Geography</option>
+            <option value="History">History</option>
+            <option value="Languages">Languages</option>
+            <option value="Literature">Literature</option>
+            <option value="Maths">Maths</option>
+            <option value="Music">Music</option>
+            <option value="Science">Science</option>
+            <option value="Society">Society</option>
+            <option value="Sport">Sport</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <h3>Instructions:</h3>
+          <input onChange={(e) => editInstructions(e.target.value, 0)} />
+          <input onChange={(e) => editInstructions(e.target.value, 1)} />
+          <input onChange={(e) => editInstructions(e.target.value, 2)} />
+          <input onChange={(e) => editInstructions(e.target.value, 3)} />
+        </div>
+
+        <div>
+          <h3>Time Limit:</h3>
+          <select
+            onChange={(e) => {
+              setTimeLimit(60 * parseInt(e.target.value));
+            }}
+          >
+            <option value="1">1 min</option>
+            <option value="2">2 mins</option>
+            <option value="3">3 mins</option>
+            <option value="4">4 mins</option>
+            <option value="5">5 mins</option>
+            <option value="6">6 mins</option>
+            <option value="7">7 mins</option>
+            <option value="8">8 mins</option>
+            <option value="9">9 mins</option>
+            <option value="10">10 mins</option>
+          </select>
+        </div>
       </div>
 
       <div>

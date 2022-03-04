@@ -8,7 +8,7 @@ interface Props {
 export const Header: React.FC<Props> = ({ setCategory }) => {
   const categories: string[] = [
     "All",
-    "Film & TV",
+    "Film/TV",
     "Geography",
     "History",
     "Languages",
