@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getQuiz, dateSlicer } from "../Utils/utils";
+import { getQuiz, patchQuiz, dateSlicer } from "../Utils/utils";
 import { Quiz, Question } from "..//Types/quiz.interface";
 
 export const PlayQuiz: React.FC = () => {
+  const emptyQuiz: Quiz = {
+    title: "",
+    category: "",
+    instructions: [],
+    created: "",
+    creator: "",
+    average: 0,
+    seconds: 0,
+    plays: 0,
+    __v: 0,
+    _id: "",
+    quizId: "",
+    questions: [{ _id: "", question: "", correct: "", accepted: [] }],
+  };
+
   const { quizId } = useParams();
-  const [quiz, setQuiz] = useState<Quiz>();
+  const [quiz, setQuiz] = useState<Quiz>(emptyQuiz);
   const [started, setStarted] = useState(false);
   const [ended, setEnded] = useState(false);
   const [guessed, setGuessed] = useState<Question[]>([]);
@@ -19,8 +34,12 @@ export const PlayQuiz: React.FC = () => {
     });
   }, [quizId]);
 
-  const endQuiz = () => {
+  const endQuiz = (done: boolean = false) => {
     setEnded(true);
+    const newPlays: number = quiz.plays + 1;
+    const toAdd = done ? 100 : (guessed.length / quiz.questions.length) * 100;
+    const newAverage = (quiz.average * quiz.plays + toAdd) / newPlays;
+    if (quizId) patchQuiz(quizId, newPlays, newAverage);
   };
 
   const evaluateText = (text: string) => {
@@ -42,7 +61,7 @@ export const PlayQuiz: React.FC = () => {
       if (valid && array.indexOf(item) === -1) {
         array.push(item);
         if (array.length === quiz?.questions.length) {
-          endQuiz();
+          endQuiz(true);
         }
       }
     });
@@ -56,8 +75,9 @@ export const PlayQuiz: React.FC = () => {
           <h1>{quiz.title}</h1>
           <h2>By: {quiz.creator}</h2>
           <h3>Created: {dateSlicer(quiz.created)}</h3>
+          <h4>Plays: {quiz.plays}</h4>
           {quiz.instructions.map((instruction) => {
-            return <h4 key={instruction}>- {instruction}</h4>;
+            return <h5 key={instruction}>- {instruction}</h5>;
           })}
           {started && !ended ? (
             <button onClick={() => endQuiz()}>Give Up</button>
