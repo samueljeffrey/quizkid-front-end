@@ -52,10 +52,16 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
       ) : (
         <button onClick={() => setOpened(true)}>Categories</button>
       )}
-      {opened ? <button onClick={() => setOpened(false)}>Close</button> : null}
-      <Link to="/create">
-        <button onClick={() => setOpened(false)}>Create</button>
-      </Link>
+      {opened ? (
+        <div>
+          <button onClick={() => setOpened(false)}>Close</button>
+        </div>
+      ) : null}
+      <div>
+        <Link to="/create">
+          <button onClick={() => setOpened(false)}>Create</button>
+        </Link>
+      </div>
     </div>
   );
 };

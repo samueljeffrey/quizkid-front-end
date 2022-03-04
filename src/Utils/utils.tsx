@@ -23,6 +23,12 @@ export const getQuiz = (id?: string) => {
   });
 };
 
+export const patchQuiz = (id: string, plays: number, average: number) => {
+  return api.patch(`/quizzes/${id}`, { plays, average }).then((response) => {
+    console.log(response);
+  });
+};
+
 export const dateSlicer = (date: string) => {
   let output = "";
   output += `${date.slice(8, 10)}/`;
