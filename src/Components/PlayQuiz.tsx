@@ -42,7 +42,8 @@ export const PlayQuiz: React.FC = () => {
     if (quizId) patchQuiz(quizId, newPlays, newAverage);
   };
 
-  const evaluateText = (text: string) => {
+  const evaluateText = (e: { target: { value: string } }) => {
+    const text = e.target.value;
     const array = [...guessed];
     quiz?.questions.forEach((item) => {
       let valid = false;
@@ -60,6 +61,7 @@ export const PlayQuiz: React.FC = () => {
       }
       if (valid && array.indexOf(item) === -1) {
         array.push(item);
+        e.target.value = "";
         if (array.length === quiz?.questions.length) {
           endQuiz(true);
         }
@@ -103,7 +105,7 @@ export const PlayQuiz: React.FC = () => {
             <h2>
               {guessed.length}/{quiz?.questions.length}
             </h2>
-            <input name="text" onChange={(e) => evaluateText(e.target.value)} />
+            <input name="text" onChange={(e) => evaluateText(e)} />
           </div>
         ) : null
       ) : null}
