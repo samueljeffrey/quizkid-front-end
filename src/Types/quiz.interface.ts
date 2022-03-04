@@ -10,12 +10,21 @@ export interface Quiz {
   average: number;
   quizId: string;
   created: string;
-  __v?: number;
+  __v: number;
+}
+
+export interface NewQuiz {
+  title: string;
+  category: string;
+  instructions: string[];
+  creator: string;
+  questions: Question[];
+  seconds: number;
 }
 
 export interface Question {
   question: string;
   correct: string;
   accepted: string[];
-  _id: string;
+  _id?: string;
 }

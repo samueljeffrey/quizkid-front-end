@@ -5,7 +5,7 @@ import { SingleQuiz } from "./SingleQuiz";
 import { getQuizzes } from "../Utils/utils";
 
 export const QuizList: React.FC<{ category: string }> = ({ category }) => {
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzes, setQuizzes] = useState<Quiz[]>();
 
   useEffect(() => {
     getQuizzes(category).then((response) => {
@@ -18,9 +18,9 @@ export const QuizList: React.FC<{ category: string }> = ({ category }) => {
       {/* Setting the heading based on chosen category filter */}
       <h1>{category} Quizzes</h1>
       {/* Listing the quizzes fitting the chosen category filter */}
-      {quizzes.length === 0 ? (
+      {quizzes && quizzes.length === 0 ? (
         <p>No quizzes found</p>
-      ) : (
+      ) : quizzes ? (
         quizzes.map((quiz) => {
           return (
             <Link to={`/quizzes/${quiz["_id"]}`} key={quiz["_id"]}>
@@ -28,6 +28,8 @@ export const QuizList: React.FC<{ category: string }> = ({ category }) => {
             </Link>
           );
         })
+      ) : (
+        <p>Loading...</p>
       )}
     </div>
   );

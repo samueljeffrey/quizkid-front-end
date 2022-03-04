@@ -1,4 +1,5 @@
 import axios from "axios";
+import { NewQuiz } from "../Types/quiz.interface";
 
 const api = axios.create({
   baseURL: "https://samueljeffrey-quizkid.herokuapp.com/api",
@@ -24,9 +25,11 @@ export const getQuiz = (id?: string) => {
 };
 
 export const patchQuiz = (id: string, plays: number, average: number) => {
-  return api.patch(`/quizzes/${id}`, { plays, average }).then((response) => {
-    console.log(response);
-  });
+  return api.patch(`/quizzes/${id}`, { plays, average }).then((response) => {});
+};
+
+export const postQuiz = (object: NewQuiz) => {
+  return api.post(`/quizzes`, object).then((response) => {});
 };
 
 export const dateSlicer = (date: string) => {
@@ -35,4 +38,8 @@ export const dateSlicer = (date: string) => {
   output += `${date.slice(5, 7)}/`;
   output += `${date.slice(0, 4)}`;
   return output;
+};
+
+export const simplify = (input: string) => {
+  return input.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
 };
