@@ -27,18 +27,26 @@ export const PlayQuiz: React.FC = () => {
     const array = [...guessed];
     quiz?.questions.forEach((item) => {
       let valid = false;
-      if (text.toLowerCase() === item.correct.toLowerCase()) valid = true;
+      if (
+        text.toLowerCase().replaceAll(" ", "") ===
+        item.correct.toLowerCase().replaceAll(" ", "")
+      )
+        valid = true;
       for (let j = 0; j < item.accepted.length; j++) {
-        if (text.toLowerCase() === item.accepted[j].toLowerCase()) valid = true;
+        if (
+          text.toLowerCase().replaceAll(" ", "") ===
+          item.accepted[j].toLowerCase().replaceAll(" ", "")
+        )
+          valid = true;
       }
       if (valid && array.indexOf(item) === -1) {
         array.push(item);
+        if (array.length === quiz?.questions.length) {
+          endQuiz();
+        }
       }
     });
     setGuessed(array);
-    if (guessed.length === quiz?.questions.length) {
-      endQuiz();
-    }
   };
 
   return (
