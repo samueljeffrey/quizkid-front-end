@@ -6,8 +6,6 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ setCategory }) => {
-  // const [opened, setOpened] = useState<boolean>(false);
-
   return (
     <div id="header-div">
       <div>
@@ -30,52 +28,6 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
             Find Quiz
           </button>
         </Link>
-        {/* {opened ? (
-            <button
-              id="main-category-button"
-              className="every-button"
-              onMouseEnter={() => setOpened(true)}
-              onMouseLeave={() => setOpened(false)}
-              onClick={() => {
-                setOpened(opened ? false : true);
-              }}
-            >
-              Categories
-            </button>
-          ) : null}
-          {opened ? (
-            <select
-              onMouseEnter={() => setOpened(true)}
-              onMouseLeave={() => setOpened(false)}
-              id="categories-list"
-            >
-              {categories.map((category) => {
-                return (
-                  <Link to="/" key={`link-${category}`}>
-                    <option
-                      className="category-list-button every-button"
-                      key={category}
-                      onClick={() => {
-                        setOpened(false);
-                        setCategory(category);
-                      }}
-                    >
-                      {category}
-                    </option>
-                  </Link>
-                );
-              })}
-            </select>
-          ) : (
-            <button
-              id="main-category-button"
-              className="every-button"
-              onMouseEnter={() => setOpened(true)}
-              onClick={() => setOpened(true)}
-            >
-              Categories
-            </button>
-          )} */}
         <Link to="/create">
           <button id="create-button" className="every-button">
             Create Quiz

@@ -1,7 +1,9 @@
 .App {
   text-align: center;
   min-height: 100vh;
-  background-color: #ffffed;
+  max-width: 1000px;
+  margin: auto;
+  background-color: #99a799;
 }
 
 /* green: #95cd41, red: #ea2c2b; */
@@ -15,6 +17,7 @@
   border: none;
   width: 100px;
   margin: 0 10px;
+  border-radius: 5px;
 }
 
 /* HEADER */
@@ -25,9 +28,9 @@
 }
 
 #header-logo {
-  height: 150px;
-  width: 150px;
-  border-radius: 75px;
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
 }
 
 #header-button-div {
@@ -51,4 +54,39 @@
 .category-selector {
   margin-top: 20px;
   background-color: #f6d860;
+}
+
+#quiz-list-div {
+  padding: 10px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.single-quiz-div {
+  width: 320px;
+  margin: 10px auto;
+}
+
+.single-quiz-link {
+  text-decoration: none;
+  color: #161616;
+}
+
+/* SINGLE QUIZ */
+
+.single-quiz-box {
+  width: 300px;
+  margin: auto;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #ffffed;
+}
+
+.single-quiz-box-title {
+  font-size: 1.4rem;
+}
+
+.single-quiz-box-details {
+  color: grey;
 }

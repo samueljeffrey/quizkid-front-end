@@ -28,10 +28,6 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
   ];
 
   useEffect(() => {
-    setCategory("All");
-  }, []);
-
-  useEffect(() => {
     setQuizzes([]);
     getQuizzes(category).then((response) => {
       setQuizzes(response.data);
@@ -53,13 +49,21 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
       {quizzes && quizzes.length === 0 ? (
         <p>No quizzes found</p>
       ) : quizzes ? (
-        quizzes.map((quiz) => {
-          return (
-            <Link to={`/quizzes/${quiz["_id"]}`} key={quiz["_id"]}>
-              <SingleQuiz details={quiz} />
-            </Link>
-          );
-        })
+        <div id="quiz-list-div">
+          {quizzes.map((quiz) => {
+            return (
+              <div className="single-quiz-div">
+                <Link
+                  className="single-quiz-link"
+                  to={`/quizzes/${quiz["_id"]}`}
+                  key={quiz["_id"]}
+                >
+                  <SingleQuiz details={quiz} />
+                </Link>
+              </div>
+            );
+          })}
+        </div>
       ) : (
         <p>Loading...</p>
       )}
