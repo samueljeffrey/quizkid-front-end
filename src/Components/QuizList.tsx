@@ -8,6 +8,7 @@ export const QuizList: React.FC<{ category: string }> = ({ category }) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   useEffect(() => {
+    setQuizzes([]);
     getQuizzes(category).then((response) => {
       setQuizzes(response.data);
     });
