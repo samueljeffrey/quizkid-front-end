@@ -21,17 +21,14 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
       <div id="header-button-div">
         <Link to="/">
           <button
-            id="find-button"
-            className="every-button"
+            className="every-button green-button"
             onClick={() => setCategory("All")}
           >
             Find Quiz
           </button>
         </Link>
         <Link to="/create">
-          <button id="create-button" className="every-button">
-            Create Quiz
-          </button>
+          <button className="every-button red-button">Create Quiz</button>
         </Link>
       </div>
     </div>
