@@ -1,26 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-interface Props {
-  setCategory: (choice: string) => void;
-}
-
-export const Header: React.FC<Props> = ({ setCategory }) => {
-  const categories: string[] = [
-    "All",
-    "Film/TV",
-    "Geography",
-    "History",
-    "Languages",
-    "Literature",
-    "Maths",
-    "Music",
-    "Science",
-    "Society",
-    "Sport",
-    "Other",
-  ];
-  const [opened, setOpened] = useState<boolean>(false);
+export const Header: React.FC = () => {
+  // const [opened, setOpened] = useState<boolean>(false);
 
   return (
     <div id="header-div">
@@ -33,12 +15,16 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
           />
         </Link>
       </div>
-      <div id="header-split-whole">
-        <div className="header-split-half">
-          {opened ? (
+      <div id="header-button-div">
+        <Link to="/">
+          <button id="find-button" className="every-button">
+            Find Quiz
+          </button>
+        </Link>
+        {/* {opened ? (
             <button
               id="main-category-button"
-              className="every-header-button"
+              className="every-button"
               onMouseEnter={() => setOpened(true)}
               onMouseLeave={() => setOpened(false)}
               onClick={() => {
@@ -49,16 +35,16 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
             </button>
           ) : null}
           {opened ? (
-            <div
+            <select
               onMouseEnter={() => setOpened(true)}
               onMouseLeave={() => setOpened(false)}
-              id="categories-list-div"
+              id="categories-list"
             >
               {categories.map((category) => {
                 return (
                   <Link to="/" key={`link-${category}`}>
-                    <button
-                      className="category-list-button every-header-button"
+                    <option
+                      className="category-list-button every-button"
                       key={category}
                       onClick={() => {
                         setOpened(false);
@@ -66,33 +52,26 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
                       }}
                     >
                       {category}
-                    </button>
+                    </option>
                   </Link>
                 );
               })}
-            </div>
+            </select>
           ) : (
             <button
               id="main-category-button"
-              className="every-header-button"
+              className="every-button"
               onMouseEnter={() => setOpened(true)}
               onClick={() => setOpened(true)}
             >
               Categories
             </button>
-          )}
-        </div>
-        <div className="header-split-half">
-          <Link className="header-links" to="/create">
-            <button
-              id="create-button"
-              className="every-header-button"
-              onClick={() => setOpened(false)}
-            >
-              Create Quiz
-            </button>
-          </Link>
-        </div>
+          )} */}
+        <Link to="/create">
+          <button id="create-button" className="every-button">
+            Create Quiz
+          </button>
+        </Link>
       </div>
     </div>
   );

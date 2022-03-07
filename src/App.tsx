@@ -13,9 +13,12 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <Header setCategory={setCategory} />
+        <Header />
         <Routes>
-          <Route path="/" element={<QuizList category={category} />} />
+          <Route
+            path="/"
+            element={<QuizList category={category} setCategory={setCategory} />}
+          />
           <Route path="/quizzes/:quizId" element={<PlayQuiz />} />
           <Route path="/create" element={<CreateQuiz />} />
           <Route path="*" element={<ErrorPage />} />

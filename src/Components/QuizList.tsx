@@ -4,8 +4,32 @@ import { Quiz } from "../Types/quiz.interface";
 import { SingleQuiz } from "./SingleQuiz";
 import { getQuizzes } from "../Utils/utils";
 
-export const QuizList: React.FC<{ category: string }> = ({ category }) => {
+interface Props {
+  category: string;
+  setCategory: (category: string) => void;
+}
+
+export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
   const [quizzes, setQuizzes] = useState<Quiz[]>();
+
+  const categories: string[] = [
+    "All",
+    "Film/TV",
+    "Geography",
+    "History",
+    "Languages",
+    "Literature",
+    "Maths",
+    "Music",
+    "Science",
+    "Society",
+    "Sport",
+    "Other",
+  ];
+
+  useEffect(() => {
+    setCategory("All");
+  }, []);
 
   useEffect(() => {
     setQuizzes([]);
@@ -16,6 +40,15 @@ export const QuizList: React.FC<{ category: string }> = ({ category }) => {
 
   return (
     <div>
+      <select className="every-button category-button">
+        {categories.map((category) => {
+          return (
+            <option key={category} onClick={() => setCategory(category)}>
+              {category}
+            </option>
+          );
+        })}
+      </select>
       {/* Setting the heading based on chosen category filter */}
       <h1>{category} Quizzes</h1>
       {/* Listing the quizzes fitting the chosen category filter */}

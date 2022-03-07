@@ -14,42 +14,28 @@
 }
 
 #header-logo {
-  height: 200px;
-  width: 200px;
-  border-radius: 100px;
+  height: 150px;
+  width: 150px;
+  border-radius: 75px;
 }
 
-.every-header-button {
+.every-button {
   padding: 4px 0;
   cursor: pointer;
   border: none;
   width: 100px;
+  margin: 0 10px;
 }
 
-#header-split-whole {
+#header-button-div {
   padding-top: 10px;
   width: 240px;
   margin: auto;
 }
 
-.header-split-half {
-  display: inline;
-  width: 100px;
-  margin: 0 10px;
-}
-
-#categories-list-div {
-  width: 100px;
-  z-index: 1;
-}
-
-#main-category-button {
+#find-button {
   background-color: #95cd41;
   color: #161616;
-}
-
-.category-list-button {
-  background-color: #7eb5a6;
 }
 
 #create-button {
