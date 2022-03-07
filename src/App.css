@@ -17,11 +17,12 @@
   width: 100px;
   margin: 0 10px;
   border-radius: 5px;
-  border: 1px black solid;
+  border: 1px #121212 solid;
 }
 
 .green-button {
   background-color: #95cd41;
+  color: #121212;
 }
 
 .red-button {
@@ -40,7 +41,7 @@
   height: 200px;
   width: 200px;
   border-radius: 100px;
-  border: 2px black solid;
+  border: 2px #121212 solid;
 }
 
 #header-button-div {
@@ -53,6 +54,7 @@
 
 .category-selector {
   margin-top: 20px;
+  width: 120px;
   background-color: #f6d860;
 }
 
@@ -130,7 +132,7 @@
   display: inline;
   height: 22px;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid #121212;
   width: 120px;
   margin: 0 10px;
 }
@@ -149,6 +151,9 @@
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #121212;
+  width: 100%;
+  margin: auto;
+  max-width: 600px;
 }
 
 .quiz-half-row {
@@ -169,6 +174,106 @@
 }
 
 .incorrect-answer-box {
+  background-color: #ea2c2b;
+  color: #ffffed;
+}
+
+/* CREATE QUIZ */
+
+#build-quiz-page {
+  padding: 10px;
+}
+
+#quiz-tips {
+  padding: 10px;
+  background-color: #ffffed;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 5px;
+}
+
+.input-labels {
+  margin-bottom: 5px;
+}
+
+.details-inputs {
+  width: 250px;
+  background-color: #ffffed;
+  border: #121212 solid 1px;
+  border-radius: 2px;
+}
+
+.create-selector {
+  width: 120px;
+  background-color: #ffffed;
+}
+
+#instructions-div {
+  max-width: 540px;
+  margin: auto;
+}
+
+.instructions-inputs {
+  margin: 4px;
+}
+
+#quiz-questions-div {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 700px;
+}
+
+.create-question-outer {
+  margin: auto;
+  width: 300px;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.create-question-box {
+  background-color: #f6d860;
+  padding-bottom: 10px;
+  border: #121212 solid 1px;
+}
+
+.accepted-input {
+  margin: 4px auto;
+}
+
+.remove-button-div {
+  margin-top: 10px;
+}
+
+.remove-button {
+  width: 150px;
+}
+
+.add-button {
+  background-color: #f6d860;
+  margin: 10px 5px;
+  width: 125px;
+}
+
+.create-button {
+  width: 125px;
+  margin: 10px 5px;
+}
+
+.create-errors {
+  height: 20px;
+  width: 250px;
+  margin: 4px auto;
+  background-color: #ea2c2b;
+  border: #121212 solid 1px;
+  color: #ffffed;
+}
+
+.red-selector {
+  background-color: #ea2c2b;
+  color: #ffffed;
+}
+
+.red-input {
   background-color: #ea2c2b;
   color: #ffffed;
 }
