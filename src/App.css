@@ -1,10 +1,34 @@
+/* UNIVERSAL */
+
 .App {
   text-align: center;
   min-height: 100vh;
-  background-color: #ffffed;
+  margin: auto;
+  padding-bottom: 5px;
+  background-color: #5463ff;
+  color: #121212;
 }
 
-/* green: #95cd41, red: #ea2c2b; */
+.every-button {
+  font-size: 1rem;
+  padding: 4px 0;
+  cursor: pointer;
+  border: none;
+  width: 100px;
+  margin: 0 10px;
+  border-radius: 5px;
+  border: 1px #121212 solid;
+}
+
+.green-button {
+  background-color: #95cd41;
+  color: #121212;
+}
+
+.red-button {
+  background-color: #ea2c2b;
+  color: #ffffed;
+}
 
 /* HEADER */
 
@@ -14,17 +38,10 @@
 }
 
 #header-logo {
-  height: 150px;
-  width: 150px;
-  border-radius: 75px;
-}
-
-.every-button {
-  padding: 4px 0;
-  cursor: pointer;
-  border: none;
-  width: 100px;
-  margin: 0 10px;
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
+  border: 2px #121212 solid;
 }
 
 #header-button-div {
@@ -33,12 +50,230 @@
   margin: auto;
 }
 
-#find-button {
-  background-color: #95cd41;
-  color: #161616;
+/* QUIZ LIST */
+
+.category-selector {
+  margin-top: 20px;
+  width: 120px;
+  background-color: #f6d860;
 }
 
-#create-button {
+#quiz-list-div {
+  max-width: 1000px;
+  padding: 10px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.single-quiz-div {
+  width: 320px;
+  margin: 10px auto;
+}
+
+.single-quiz-link {
+  text-decoration: none;
+}
+
+/* SINGLE QUIZ */
+
+.single-quiz-box {
+  width: 300px;
+  margin: auto;
+  border: 1px solid #121212;
+  border-radius: 5px;
+  background-color: #f6d860;
+}
+
+.single-quiz-box-title {
+  font-size: 1.4rem;
+  color: #121212;
+}
+
+.single-quiz-box-details {
+  color: #444444;
+}
+
+/* PLAY QUIZ */
+
+#play-quiz-page {
+  margin: 10px;
+}
+
+#play-quiz-div {
+  background-color: #ffffed;
+  border-radius: 5px;
+  margin: auto;
+  max-width: 800px;
+  padding: 10px;
+}
+
+#instructions-div {
+  line-height: 0.5;
+}
+
+.end-percentages {
+  margin: 5px;
+  padding: 0;
+}
+
+#title-during-quiz {
+  margin: 0 0 5px;
+  padding: 0;
+}
+
+#current-score {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+#quiz-input {
+  display: inline;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid #121212;
+  width: 120px;
+  margin: 0 10px;
+}
+
+#give-up-button {
+  display: inline;
+  margin: 0;
+  width: 80px;
+}
+
+#quiz-questions-div {
+  margin: 20px auto;
+}
+
+.quiz-whole-row {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #121212;
+  width: 100%;
+  margin: auto;
+  max-width: 600px;
+}
+
+.quiz-half-row {
+  width: 50%;
+}
+
+.quiz-box-text {
+  padding: 3px;
+  margin: 0;
+}
+
+.quiz-question-box {
+  background-color: #f6d860;
+}
+
+.correct-answer-box {
+  background-color: #95cd41;
+}
+
+.incorrect-answer-box {
+  background-color: #ea2c2b;
+  color: #ffffed;
+}
+
+/* CREATE QUIZ */
+
+#build-quiz-page {
+  padding: 10px;
+}
+
+#quiz-tips {
+  padding: 10px;
+  background-color: #ffffed;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 5px;
+}
+
+.input-labels {
+  margin-bottom: 5px;
+}
+
+.details-inputs {
+  width: 250px;
+  background-color: #ffffed;
+  border: #121212 solid 1px;
+  border-radius: 2px;
+}
+
+.create-selector {
+  width: 120px;
+  background-color: #ffffed;
+}
+
+#instructions-div {
+  max-width: 540px;
+  margin: auto;
+}
+
+.instructions-inputs {
+  margin: 4px;
+}
+
+#quiz-questions-div {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 700px;
+}
+
+.create-question-outer {
+  margin: auto;
+  width: 300px;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.create-question-box {
+  background-color: #f6d860;
+  padding-bottom: 10px;
+  border: #121212 solid 1px;
+}
+
+.accepted-input {
+  margin: 4px auto;
+}
+
+.remove-button-div {
+  margin-top: 10px;
+}
+
+.remove-button {
+  width: 150px;
+}
+
+.add-button {
+  background-color: #f6d860;
+  margin: 10px 5px;
+  width: 125px;
+}
+
+.create-button {
+  width: 125px;
+  margin: 10px 5px;
+}
+
+.create-errors {
+  height: 20px;
+  width: 250px;
+  margin: 4px auto;
+  background-color: #ea2c2b;
+  border: #121212 solid 1px;
+  color: #ffffed;
+}
+
+.red-selector {
+  background-color: #ea2c2b;
+  color: #ffffed;
+}
+
+.red-input {
   background-color: #ea2c2b;
   color: #ffffed;
 }

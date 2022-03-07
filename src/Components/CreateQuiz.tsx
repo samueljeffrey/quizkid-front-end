@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { postQuiz } from "../Utils/utils";
+import { Quiz } from "../Types/quiz.interface";
 
 interface Question {
   index: number;
@@ -26,6 +28,8 @@ export const CreateQuiz: React.FC = () => {
   const [attempted, setAttempted] = useState<boolean>(false);
 
   const [built, setBuilt] = useState<boolean>(false);
+
+  const [uploaded, setUploaded] = useState<Quiz>();
 
   const editTitle = (text: string) => {
     setTitle(text);
@@ -113,7 +117,9 @@ export const CreateQuiz: React.FC = () => {
     questions.forEach((question) => {
       question.accepted = question.accepted.filter((item) => item !== "");
     });
-    postQuiz(object);
+    postQuiz(object).then((response) => {
+      setUploaded(response.data.data);
+    });
   };
 
   useEffect(() => {
@@ -122,8 +128,8 @@ export const CreateQuiz: React.FC = () => {
 
   if (!built) {
     return (
-      <div>
-        <div>
+      <div id="build-quiz-page">
+        <div id="quiz-tips">
           <h1>Create your Quiz</h1>
           <p>
             <strong>Title:</strong> Simply enter a title for your quiz.
@@ -183,142 +189,242 @@ export const CreateQuiz: React.FC = () => {
           </p>
         </div>
 
-        <div>
+        <div id="quiz-details">
           <div>
-            <h3>Title:</h3>
-            {attempted && title === "" ? <p>You must enter a title</p> : null}
-            <input onChange={(e) => editTitle(e.target.value)} />
+            <h3 className="input-labels">Title:</h3>
+            {attempted && title === "" ? (
+              <input
+                className="details-inputs red-input"
+                onChange={(e) => editTitle(e.target.value)}
+              />
+            ) : (
+              <input
+                className="details-inputs"
+                onChange={(e) => editTitle(e.target.value)}
+              />
+            )}
           </div>
           <div>
-            <h3>Your Name:</h3>
-            {attempted && creator === "" ? <p>You must enter a name</p> : null}
-            <input onChange={(e) => editCreator(e.target.value)} />
+            <h3 className="input-labels">Your Name:</h3>
+            {attempted && creator === "" ? (
+              <input
+                className="details-inputs red-input"
+                onChange={(e) => editCreator(e.target.value)}
+              />
+            ) : (
+              <input
+                className="details-inputs"
+                onChange={(e) => editCreator(e.target.value)}
+              />
+            )}
           </div>
           <div>
-            <h3>Category:</h3>
+            <h3 className="input-labels">Category:</h3>
             {attempted && category === "Select" ? (
-              <p>You must select a category</p>
-            ) : null}
-            <select
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
-            >
-              <option value="Select">Select</option>
-              <option value="Film/TV">Film/TV</option>
-              <option value="Geography">Geography</option>
-              <option value="History">History</option>
-              <option value="Languages">Languages</option>
-              <option value="Literature">Literature</option>
-              <option value="Maths">Maths</option>
-              <option value="Music">Music</option>
-              <option value="Science">Science</option>
-              <option value="Society">Society</option>
-              <option value="Sport">Sport</option>
-              <option value="Other">Other</option>
-            </select>
+              <select
+                className="every-button create-selector red-selector"
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                }}
+              >
+                <option value="Select">Select</option>
+                <option value="Film/TV">Film/TV</option>
+                <option value="Geography">Geography</option>
+                <option value="History">History</option>
+                <option value="Languages">Languages</option>
+                <option value="Literature">Literature</option>
+                <option value="Maths">Maths</option>
+                <option value="Music">Music</option>
+                <option value="Science">Science</option>
+                <option value="Society">Society</option>
+                <option value="Sport">Sport</option>
+                <option value="Other">Other</option>
+              </select>
+            ) : (
+              <select
+                className="every-button create-selector"
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                }}
+              >
+                <option value="Select">Select</option>
+                <option value="Film/TV">Film/TV</option>
+                <option value="Geography">Geography</option>
+                <option value="History">History</option>
+                <option value="Languages">Languages</option>
+                <option value="Literature">Literature</option>
+                <option value="Maths">Maths</option>
+                <option value="Music">Music</option>
+                <option value="Science">Science</option>
+                <option value="Society">Society</option>
+                <option value="Sport">Sport</option>
+                <option value="Other">Other</option>
+              </select>
+            )}
+          </div>
+          <div id="instructions-div">
+            <h3 className="input-labels">Instructions:</h3>
+            <input
+              className="details-inputs instructions-inputs"
+              onChange={(e) => editInstructions(e.target.value, 0)}
+            />
+            <input
+              className="details-inputs instructions-inputs"
+              onChange={(e) => editInstructions(e.target.value, 1)}
+            />
+            <input
+              className="details-inputs instructions-inputs"
+              onChange={(e) => editInstructions(e.target.value, 2)}
+            />
+            <input
+              className="details-inputs instructions-inputs"
+              onChange={(e) => editInstructions(e.target.value, 3)}
+            />
           </div>
           <div>
-            <h3>Instructions:</h3>
-            <input onChange={(e) => editInstructions(e.target.value, 0)} />
-            <input onChange={(e) => editInstructions(e.target.value, 1)} />
-            <input onChange={(e) => editInstructions(e.target.value, 2)} />
-            <input onChange={(e) => editInstructions(e.target.value, 3)} />
-          </div>
-          <div>
-            <h3>Time Limit:</h3>
+            <h3 className="input-labels">Time Limit:</h3>
             {attempted && seconds === 0 ? (
-              <p>You must select a time limit</p>
-            ) : null}
-            <select
-              onChange={(e) => {
-                setSeconds(60 * parseInt(e.target.value));
-              }}
-            >
-              <option value="0">Select</option>
-              <option value="1">1 min</option>
-              <option value="2">2 mins</option>
-              <option value="3">3 mins</option>
-              <option value="4">4 mins</option>
-              <option value="5">5 mins</option>
-              <option value="6">6 mins</option>
-              <option value="7">7 mins</option>
-              <option value="8">8 mins</option>
-              <option value="9">9 mins</option>
-              <option value="10">10 mins</option>
-            </select>
+              <select
+                className="every-button create-selector red-selector"
+                onChange={(e) => {
+                  setSeconds(60 * parseInt(e.target.value));
+                }}
+              >
+                <option value="0">Select</option>
+                <option value="1">1 min</option>
+                <option value="2">2 mins</option>
+                <option value="3">3 mins</option>
+                <option value="4">4 mins</option>
+                <option value="5">5 mins</option>
+                <option value="6">6 mins</option>
+                <option value="7">7 mins</option>
+                <option value="8">8 mins</option>
+                <option value="9">9 mins</option>
+                <option value="10">10 mins</option>
+              </select>
+            ) : (
+              <select
+                className="every-button create-selector"
+                onChange={(e) => {
+                  setSeconds(60 * parseInt(e.target.value));
+                }}
+              >
+                <option value="0">Select</option>
+                <option value="1">1 min</option>
+                <option value="2">2 mins</option>
+                <option value="3">3 mins</option>
+                <option value="4">4 mins</option>
+                <option value="5">5 mins</option>
+                <option value="6">6 mins</option>
+                <option value="7">7 mins</option>
+                <option value="8">8 mins</option>
+                <option value="9">9 mins</option>
+                <option value="10">10 mins</option>
+              </select>
+            )}
           </div>
         </div>
 
         <div>
-          <h3>Questions:</h3>
-          {questions.map((item) => {
-            return (
-              <div>
-                <h4>{item.index + 1}.</h4>
-                <div>
-                  <p>Question:</p>
-                  {attempted && item.question === "" ? (
-                    <p>You must enter a question</p>
-                  ) : null}
-                  <input
-                    onChange={(e) =>
-                      editQuestion(e.target.value, item.index, "question")
-                    }
-                  />
-                </div>
-                <div>
-                  <p>Correct:</p>
-                  {attempted && item.correct === "" ? (
-                    <p>You must enter an answer</p>
-                  ) : null}
-                  <input
-                    onChange={(e) =>
-                      editQuestion(e.target.value, item.index, "correct")
-                    }
-                  />
-                </div>
-                <div>
-                  <p>Accepted:</p>
-                  <input
-                    onChange={(e) =>
-                      editQuestion(e.target.value, item.index, "accepted0")
-                    }
-                  />
-                  <input
-                    onChange={(e) =>
-                      editQuestion(e.target.value, item.index, "accepted1")
-                    }
-                  />
-                  <input
-                    onChange={(e) =>
-                      editQuestion(e.target.value, item.index, "accepted2")
-                    }
-                  />
-                  <input
-                    onChange={(e) =>
-                      editQuestion(e.target.value, item.index, "accepted3")
-                    }
-                  />
-                </div>
-                <div>
-                  <button onClick={() => deleteQuestion(item.index)}>
-                    Delete Question
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-          <button onClick={() => addQuestion()}>Add Question</button>
-        </div>
+          <h3 className="input-labels">Questions:</h3>
+          <div id="quiz-questions-div">
+            {questions.map((item) => {
+              return (
+                <div className="create-question-outer">
+                  <div className="create-question-box">
+                    <h3 className="input-labels">{item.index + 1}.</h3>
+                    <p className="input-labels">Question:</p>
+                    {attempted && item.question === "" ? (
+                      <input
+                        className="details-inputs red-input"
+                        onChange={(e) =>
+                          editQuestion(e.target.value, item.index, "question")
+                        }
+                      />
+                    ) : (
+                      <input
+                        className="details-inputs"
+                        onChange={(e) =>
+                          editQuestion(e.target.value, item.index, "question")
+                        }
+                      />
+                    )}
 
-        <div>
+                    <p className="input-labels">Correct:</p>
+                    {attempted && item.correct === "" ? (
+                      <input
+                        className="details-inputs red-input"
+                        onChange={(e) =>
+                          editQuestion(e.target.value, item.index, "correct")
+                        }
+                      />
+                    ) : (
+                      <input
+                        className="details-inputs"
+                        onChange={(e) =>
+                          editQuestion(e.target.value, item.index, "correct")
+                        }
+                      />
+                    )}
+
+                    <p className="input-labels">Accepted:</p>
+                    <input
+                      className="details-inputs accepted-input"
+                      onChange={(e) =>
+                        editQuestion(e.target.value, item.index, "accepted0")
+                      }
+                    />
+                    <input
+                      className="details-inputs accepted-input"
+                      onChange={(e) =>
+                        editQuestion(e.target.value, item.index, "accepted1")
+                      }
+                    />
+                    <input
+                      className="details-inputs accepted-input"
+                      onChange={(e) =>
+                        editQuestion(e.target.value, item.index, "accepted2")
+                      }
+                    />
+                    <input
+                      className="details-inputs accepted-input"
+                      onChange={(e) =>
+                        editQuestion(e.target.value, item.index, "accepted3")
+                      }
+                    />
+                    <div className="remove-button-div">
+                      <button
+                        className="every-button red-button remove-button"
+                        onClick={() => deleteQuestion(item.index)}
+                      >
+                        Remove Question
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {attempted ? (
+            <div>
+              <p className="input-labels">
+                Please complete the red fields above.
+              </p>
+            </div>
+          ) : null}
           <button
+            className="every-button add-button"
+            onClick={() => addQuestion()}
+          >
+            Add Question
+          </button>
+          <button
+            className="every-button green-button create-button"
             onClick={() => {
               evaluateQuiz();
             }}
           >
-            Create
+            Create Quiz
           </button>
         </div>
       </div>
@@ -326,7 +432,16 @@ export const CreateQuiz: React.FC = () => {
   } else {
     return (
       <div>
-        <h1>sending...</h1>
+        {uploaded === undefined ? (
+          <h1>Sending...</h1>
+        ) : (
+          <div>
+            <h1>Successfully posted</h1>
+            <Link to={`/quizzes/${uploaded["_id"]}`}>
+              <button className="every-button green-button">See Quiz</button>
+            </Link>
+          </div>
+        )}
       </div>
     );
   }

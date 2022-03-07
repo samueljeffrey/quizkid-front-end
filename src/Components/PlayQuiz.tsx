@@ -45,7 +45,7 @@ export const PlayQuiz: React.FC = () => {
   const evaluateText = (e: { target: { value: string } }) => {
     const text = e.target.value;
     const array = [...guessed];
-    quiz?.questions.forEach((item) => {
+    quiz.questions.forEach((item) => {
       let valid = false;
       if (simplify(text) === simplify(item.correct)) valid = true;
       for (let j = 0; j < item.accepted.length; j++) {
@@ -54,7 +54,7 @@ export const PlayQuiz: React.FC = () => {
       if (valid && array.indexOf(item) === -1) {
         array.push(item);
         e.target.value = "";
-        if (array.length === quiz?.questions.length) {
+        if (array.length === quiz.questions.length) {
           endQuiz(true);
         }
       }
@@ -63,87 +63,110 @@ export const PlayQuiz: React.FC = () => {
   };
 
   return (
-    <div>
-      {quiz ? (
-        <div>
-          <h1>{quiz.title}</h1>
-          <h2>By: {quiz.creator}</h2>
-          <h3>Created: {dateSlicer(quiz.created)}</h3>
-          <h4>Plays: {quiz.plays}</h4>
-          {quiz.instructions.map((instruction) => {
-            return <h5 key={instruction}>- {instruction}</h5>;
-          })}
-          {started && !ended ? (
-            <button onClick={() => endQuiz()}>Give Up</button>
-          ) : !started ? (
-            <button onClick={() => setStarted(true)}>Start</button>
-          ) : (
-            <div>
-              <h2>
-                Score:{" "}
-                {Math.round((guessed.length / quiz.questions.length) * 100)}%
-              </h2>
-              <h3>Average: {quiz.average}%</h3>
-            </div>
-          )}
-        </div>
-      ) : (
-        <h2>No quiz found</h2>
-      )}
-
-      {quiz ? (
-        started && !ended ? (
+    <div id="play-quiz-page">
+      <div id="play-quiz-div">
+        {/* If quiz has not yet started OR already ended */}
+        {quiz.title === "" ? null : !started || ended ? (
           <div>
-            <h2>
-              {guessed.length}/{quiz?.questions.length}
-            </h2>
-            <input name="text" onChange={(e) => evaluateText(e)} />
+            <h1>{quiz.title}</h1>
+            <p>
+              By <strong>{quiz.creator}</strong> -{" "}
+              <em>{dateSlicer(quiz.created)}</em> - {quiz.plays}{" "}
+              {quiz.plays === 1 ? "play" : "plays"}
+            </p>
           </div>
-        ) : null
-      ) : null}
+        ) : null}
 
-      {started && !ended
-        ? quiz?.questions.map((question) => {
-            return (
-              <div key={question.question}>
-                <div className="question-box">
-                  <p>{question.question}</p>
-                </div>
-                {guessed.indexOf(question) === -1 ? (
-                  <div className="answer-box-empty"></div>
-                ) : (
-                  <div className="answer-box-correct">
-                    <p>{question.correct}</p>
-                  </div>
-                )}
+        {/* Only if quiz has not yet started */}
+        {quiz.title !== "" && !started ? (
+          <div>
+            {quiz.instructions.length ? (
+              <div id="instructions-div">
+                <p>
+                  <strong>Instructions:</strong>
+                </p>
+                {quiz.instructions.map((instruction) => {
+                  return <p key={instruction}>- {instruction}</p>;
+                })}
               </div>
-            );
-          })
-        : null}
+            ) : null}
 
-      {quiz
-        ? ended
-          ? quiz?.questions.map((question) => {
+            <button
+              className="every-button green-button"
+              onClick={() => setStarted(true)}
+            >
+              Start
+            </button>
+          </div>
+        ) : null}
+
+        {/* Only if quiz has already ended */}
+        {ended ? (
+          <div>
+            <h2 className="end-percentages">
+              Score:{" "}
+              {Math.round((guessed.length / quiz.questions.length) * 100)}%
+            </h2>
+            <h3 className="end-percentages">Average: {quiz.average}%</h3>
+          </div>
+        ) : null}
+
+        {/* Only if quiz is currently in play */}
+        {started && !ended ? (
+          <div>
+            <p id="title-during-quiz">{quiz.title}</p>
+            <div>
+              <h3 id="current-score">
+                {guessed.length}/{quiz.questions.length}
+              </h3>
+              <input
+                id="quiz-input"
+                name="text"
+                onChange={(e) => evaluateText(e)}
+              />
+              <button
+                className="every-button red-button"
+                id="give-up-button"
+                onClick={() => endQuiz()}
+              >
+                Give Up
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        {/* Quiz always displayed once retrieved from API */}
+        {quiz.title !== "" ? (
+          <div id="quiz-questions-div">
+            {quiz.questions.map((question) => {
               return (
-                <div key={question.question}>
-                  <div className="question-box">
-                    <p>{question.question}</p>
+                <div className="quiz-whole-row" key={question.question}>
+                  <div className="quiz-question-box quiz-half-row">
+                    <p className="quiz-question quiz-box-text">
+                      {question.question}
+                    </p>
                   </div>
-
-                  {guessed.indexOf(question) === -1 ? (
-                    <div className="answer-box-incorrect">
-                      <p>!!!!! {question.correct} !!!!!</p>
+                  {guessed.indexOf(question) > -1 ? (
+                    <div className="correct-answer-box quiz-half-row">
+                      <p className="correct-answer quiz-box-text">
+                        {question.correct}
+                      </p>
                     </div>
-                  ) : (
-                    <div className="answer-box-correct">
-                      <p>{question.correct}</p>
+                  ) : ended ? (
+                    <div className="incorrect-answer-box quiz-half-row">
+                      <p className="incorrect-answer quiz-box-text">
+                        {question.correct}
+                      </p>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               );
-            })
-          : null
-        : null}
+            })}
+          </div>
+        ) : (
+          <h1>Quiz not found</h1>
+        )}
+      </div>
     </div>
   );
 };

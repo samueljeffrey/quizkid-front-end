@@ -28,11 +28,6 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
   ];
 
   useEffect(() => {
-    setCategory("All");
-  }, []);
-
-  useEffect(() => {
-    setQuizzes([]);
     getQuizzes(category).then((response) => {
       setQuizzes(response.data);
     });
@@ -40,7 +35,7 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
 
   return (
     <div>
-      <select className="every-button category-button">
+      <select value={category} className="every-button category-selector">
         {categories.map((category) => {
           return (
             <option key={category} onClick={() => setCategory(category)}>
@@ -49,21 +44,27 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
           );
         })}
       </select>
-      {/* Setting the heading based on chosen category filter */}
       <h1>{category} Quizzes</h1>
-      {/* Listing the quizzes fitting the chosen category filter */}
-      {quizzes && quizzes.length === 0 ? (
-        <p>No quizzes found</p>
-      ) : quizzes ? (
-        quizzes.map((quiz) => {
-          return (
-            <Link to={`/quizzes/${quiz["_id"]}`} key={quiz["_id"]}>
-              <SingleQuiz details={quiz} />
-            </Link>
-          );
-        })
-      ) : (
+      {!quizzes ? (
         <p>Loading...</p>
+      ) : quizzes.length === 0 ? (
+        <p>No quizzes found</p>
+      ) : (
+        <div id="quiz-list-div">
+          {quizzes.map((quiz) => {
+            return (
+              <div className="single-quiz-div">
+                <Link
+                  className="single-quiz-link"
+                  to={`/quizzes/${quiz["_id"]}`}
+                  key={quiz["_id"]}
+                >
+                  <SingleQuiz details={quiz} />
+                </Link>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

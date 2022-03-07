@@ -29,7 +29,9 @@ export const patchQuiz = (id: string, plays: number, average: number) => {
 };
 
 export const postQuiz = (object: NewQuiz) => {
-  return api.post(`/quizzes`, object).then((response) => {});
+  return api.post(`/quizzes`, object).then((response) => {
+    return response;
+  });
 };
 
 export const dateSlicer = (date: string) => {
