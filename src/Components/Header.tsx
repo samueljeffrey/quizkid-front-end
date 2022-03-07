@@ -20,47 +20,79 @@ export const Header: React.FC<Props> = ({ setCategory }) => {
     "Sport",
     "Other",
   ];
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState<boolean>(false);
 
   return (
-    <div>
+    <div id="header-div">
       <div>
-        <img
-          src="https://i.postimg.cc/NMxRsSNJ/quizkid-logo.png"
-          alt="quizkid logo"
-        />
         <Link to="/">
-          <h1>Quizkid</h1>
+          <img
+            src="https://i.postimg.cc/NMxRsSNJ/quizkid-logo.png"
+            alt="quizkid logo"
+            id="header-logo"
+          />
         </Link>
       </div>
-      {opened ? (
-        categories.map((category) => {
-          return (
-            <Link to="/" key={`link-${category}`}>
-              <button
-                key={category}
-                onClick={() => {
-                  setOpened(false);
-                  setCategory(category);
-                }}
-              >
-                {category}
-              </button>
-            </Link>
-          );
-        })
-      ) : (
-        <button onClick={() => setOpened(true)}>Categories</button>
-      )}
-      {opened ? (
-        <div>
-          <button onClick={() => setOpened(false)}>Close</button>
+      <div id="header-split-whole">
+        <div className="header-split-half">
+          {opened ? (
+            <button
+              id="main-category-button"
+              className="every-header-button"
+              onMouseEnter={() => setOpened(true)}
+              onMouseLeave={() => setOpened(false)}
+              onClick={() => {
+                setOpened(opened ? false : true);
+              }}
+            >
+              Categories
+            </button>
+          ) : null}
+          {opened ? (
+            <div
+              onMouseEnter={() => setOpened(true)}
+              onMouseLeave={() => setOpened(false)}
+              id="categories-list-div"
+            >
+              {categories.map((category) => {
+                return (
+                  <Link to="/" key={`link-${category}`}>
+                    <button
+                      className="category-list-button every-header-button"
+                      key={category}
+                      onClick={() => {
+                        setOpened(false);
+                        setCategory(category);
+                      }}
+                    >
+                      {category}
+                    </button>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <button
+              id="main-category-button"
+              className="every-header-button"
+              onMouseEnter={() => setOpened(true)}
+              onClick={() => setOpened(true)}
+            >
+              Categories
+            </button>
+          )}
         </div>
-      ) : null}
-      <div>
-        <Link to="/create">
-          <button onClick={() => setOpened(false)}>Create</button>
-        </Link>
+        <div className="header-split-half">
+          <Link className="header-links" to="/create">
+            <button
+              id="create-button"
+              className="every-header-button"
+              onClick={() => setOpened(false)}
+            >
+              Create Quiz
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
