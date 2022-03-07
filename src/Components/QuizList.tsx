@@ -40,7 +40,7 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
 
   return (
     <div>
-      <select className="every-button category-button">
+      <select value={category} className="every-button category-selector">
         {categories.map((category) => {
           return (
             <option key={category} onClick={() => setCategory(category)}>
@@ -49,9 +49,7 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
           );
         })}
       </select>
-      {/* Setting the heading based on chosen category filter */}
       <h1>{category} Quizzes</h1>
-      {/* Listing the quizzes fitting the chosen category filter */}
       {quizzes && quizzes.length === 0 ? (
         <p>No quizzes found</p>
       ) : quizzes ? (

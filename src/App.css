@@ -6,6 +6,17 @@
 
 /* green: #95cd41, red: #ea2c2b; */
 
+/* UNIVERSAL */
+
+.every-button {
+  font-size: 1rem;
+  padding: 4px 0;
+  cursor: pointer;
+  border: none;
+  width: 100px;
+  margin: 0 10px;
+}
+
 /* HEADER */
 
 #header-div {
@@ -17,14 +28,6 @@
   height: 150px;
   width: 150px;
   border-radius: 75px;
-}
-
-.every-button {
-  padding: 4px 0;
-  cursor: pointer;
-  border: none;
-  width: 100px;
-  margin: 0 10px;
 }
 
 #header-button-div {
@@ -41,4 +44,11 @@
 #create-button {
   background-color: #ea2c2b;
   color: #ffffed;
+}
+
+/* QUIZ LIST */
+
+.category-selector {
+  margin-top: 20px;
+  background-color: #f6d860;
 }
