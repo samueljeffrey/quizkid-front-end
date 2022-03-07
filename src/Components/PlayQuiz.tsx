@@ -135,33 +135,37 @@ export const PlayQuiz: React.FC = () => {
           </div>
         ) : null}
 
-        {/* Quiz itself is always displayed */}
-        <div id="quiz-questions-div">
-          {quiz.questions.map((question) => {
-            return (
-              <div className="quiz-whole-row" key={question.question}>
-                <div className="quiz-question-box quiz-half-row">
-                  <p className="quiz-question quiz-box-text">
-                    {question.question}
-                  </p>
+        {/* Quiz always displayed once retrieved from API */}
+        {quiz.title !== "" ? (
+          <div id="quiz-questions-div">
+            {quiz.questions.map((question) => {
+              return (
+                <div className="quiz-whole-row" key={question.question}>
+                  <div className="quiz-question-box quiz-half-row">
+                    <p className="quiz-question quiz-box-text">
+                      {question.question}
+                    </p>
+                  </div>
+                  {guessed.indexOf(question) > -1 ? (
+                    <div className="correct-answer-box quiz-half-row">
+                      <p className="correct-answer quiz-box-text">
+                        {question.correct}
+                      </p>
+                    </div>
+                  ) : ended ? (
+                    <div className="incorrect-answer-box quiz-half-row">
+                      <p className="incorrect-answer quiz-box-text">
+                        {question.correct}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
-                {guessed.indexOf(question) > -1 ? (
-                  <div className="correct-answer-box quiz-half-row">
-                    <p className="correct-answer quiz-box-text">
-                      {question.correct}
-                    </p>
-                  </div>
-                ) : ended ? (
-                  <div className="incorrect-answer-box quiz-half-row">
-                    <p className="incorrect-answer quiz-box-text">
-                      {question.correct}
-                    </p>
-                  </div>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : (
+          <h1>Quiz not found</h1>
+        )}
       </div>
     </div>
   );

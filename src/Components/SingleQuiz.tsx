@@ -11,8 +11,9 @@ export const SingleQuiz: React.FC<Props> = ({ details }) => {
     <div className="single-quiz-box">
       <p className="single-quiz-box-title">{details.title}</p>
       <p className="single-quiz-box-details">
-        {details.creator} - <em>{dateSlicer(details.created)}</em> -{" "}
-        {details.plays} {details.plays === 1 ? "play" : "plays"}
+        By <strong>{details.creator}</strong> -{" "}
+        <em>{dateSlicer(details.created)}</em> - {details.plays}{" "}
+        {details.plays === 1 ? "play" : "plays"}
       </p>
     </div>
   );
