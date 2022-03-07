@@ -16,7 +16,7 @@
   border: none;
   width: 100px;
   margin: 0 10px;
-  border-radius: 5px;
+  border-radius: 2px;
   border: 1px #121212 solid;
 }
 
@@ -81,7 +81,7 @@
   width: 300px;
   margin: auto;
   border: 1px solid #121212;
-  border-radius: 5px;
+  border-radius: 2px;
   background-color: #f6d860;
 }
 
@@ -102,7 +102,7 @@
 
 #play-quiz-div {
   background-color: #ffffed;
-  border-radius: 5px;
+  border-radius: 2px;
   margin: auto;
   max-width: 800px;
   padding: 10px;
@@ -131,7 +131,7 @@
 #quiz-input {
   display: inline;
   height: 22px;
-  border-radius: 5px;
+  border-radius: 2px;
   border: 1px solid #121212;
   width: 120px;
   margin: 0 10px;
@@ -189,7 +189,7 @@
   background-color: #ffffed;
   max-width: 800px;
   margin: auto;
-  border-radius: 5px;
+  border-radius: 2px;
 }
 
 .input-labels {
@@ -220,7 +220,7 @@
 #quiz-questions-div {
   display: flex;
   flex-wrap: wrap;
-  max-width: 700px;
+  max-width: 640px;
 }
 
 .create-question-outer {
@@ -276,4 +276,9 @@
 .red-input {
   background-color: #ea2c2b;
   color: #ffffed;
+}
+
+.bottom-error {
+  color: #ffffed;
+  margin: 0 auto;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { postQuiz } from "../Utils/utils";
 import { Quiz } from "../Types/quiz.interface";
@@ -121,10 +121,6 @@ export const CreateQuiz: React.FC = () => {
       setUploaded(response.data.data);
     });
   };
-
-  useEffect(() => {
-    addQuestion();
-  }, []);
 
   if (!built) {
     return (
@@ -407,7 +403,7 @@ export const CreateQuiz: React.FC = () => {
           </div>
           {attempted ? (
             <div>
-              <p className="input-labels">
+              <p className="input-labels bottom-error">
                 Please complete the red fields above.
               </p>
             </div>
