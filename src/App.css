@@ -59,15 +59,11 @@
 }
 
 #quiz-list-div {
-  max-width: 1000px;
   padding: 10px;
   margin: auto;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .single-quiz-div {
-  width: 320px;
   margin: 10px auto;
 }
 
@@ -78,7 +74,7 @@
 /* SINGLE QUIZ */
 
 .single-quiz-box {
-  width: 300px;
+  max-width: 600px;
   margin: auto;
   border: 1px solid #121212;
   border-radius: 2px;
