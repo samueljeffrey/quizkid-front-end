@@ -21,17 +21,24 @@ export const PlayQuiz: React.FC = () => {
 
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState<Quiz>(emptyQuiz);
+  const [notFound, setNotFound] = useState<boolean>(false);
+
   const [started, setStarted] = useState(false);
   const [ended, setEnded] = useState(false);
   const [guessed, setGuessed] = useState<Question[]>([]);
 
   useEffect(() => {
+    setNotFound(false);
     setStarted(false);
     setEnded(false);
-    getQuiz(quizId).then((response: Quiz) => {
-      setQuiz(response);
-      setGuessed([]);
-    });
+    getQuiz(quizId)
+      .then((response: Quiz) => {
+        setQuiz(response);
+        setGuessed([]);
+      })
+      .catch(() => {
+        setNotFound(true);
+      });
   }, [quizId]);
 
   const endQuiz = (done: boolean = false) => {
@@ -61,6 +68,10 @@ export const PlayQuiz: React.FC = () => {
     });
     setGuessed(array);
   };
+
+  if (notFound) {
+    return <h1>Quiz not found</h1>;
+  }
 
   return (
     <div id="play-quiz-page">
@@ -164,7 +175,7 @@ export const PlayQuiz: React.FC = () => {
             })}
           </div>
         ) : (
-          <h1>Quiz not found</h1>
+          <h1>Loading...</h1>
         )}
       </div>
     </div>

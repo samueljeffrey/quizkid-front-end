@@ -414,14 +414,16 @@ export const CreateQuiz: React.FC = () => {
           >
             Add Question
           </button>
-          <button
-            className="every-button green-button create-button"
-            onClick={() => {
-              evaluateQuiz();
-            }}
-          >
-            Create Quiz
-          </button>
+          {questions.length ? (
+            <button
+              className="every-button green-button create-button"
+              onClick={() => {
+                evaluateQuiz();
+              }}
+            >
+              Create Quiz
+            </button>
+          ) : null}
         </div>
       </div>
     );
