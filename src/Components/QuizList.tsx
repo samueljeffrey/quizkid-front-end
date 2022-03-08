@@ -32,7 +32,7 @@ export const QuizList: React.FC = () => {
     getQuizzes(category).then((response) => {
       setQuizzes(response.data);
     });
-  }, [setCategory]);
+  }, [category]);
 
   return (
     <div>
