@@ -4,13 +4,10 @@ import { Quiz } from "../Types/quiz.interface";
 import { SingleQuiz } from "./SingleQuiz";
 import { getQuizzes } from "../Utils/utils";
 
-interface Props {
-  category: string;
-  setCategory: (category: string) => void;
-}
-
-export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
+export const QuizList: React.FC = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>();
+
+  const [category, setCategory] = useState("All");
 
   const categories: string[] = [
     "All",
@@ -26,6 +23,10 @@ export const QuizList: React.FC<Props> = ({ category, setCategory }) => {
     "Sport",
     "Other",
   ];
+
+  useEffect(() => {
+    setCategory("All");
+  }, []);
 
   useEffect(() => {
     getQuizzes(category).then((response) => {
