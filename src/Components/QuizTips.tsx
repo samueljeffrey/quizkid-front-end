@@ -1,6 +1,6 @@
 import React from "react";
 
-export const QuizTips = () => {
+export const QuizTips: React.FC = () => {
   return (
     <div id="quiz-tips">
       <h1>Create your Quiz</h1>

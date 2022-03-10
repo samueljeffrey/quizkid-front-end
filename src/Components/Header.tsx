@@ -4,15 +4,13 @@ import { Link } from "react-router-dom";
 export const Header: React.FC = () => {
   return (
     <div id="header-div">
-      <div>
-        <Link to="/">
-          <img
-            src="https://i.postimg.cc/NMxRsSNJ/quizkid-logo.png"
-            alt="quizkid logo"
-            id="header-logo"
-          />
-        </Link>
-      </div>
+      <Link to="/">
+        <img
+          src="https://i.postimg.cc/NMxRsSNJ/quizkid-logo.png"
+          alt="quizkid logo"
+          id="header-logo"
+        />
+      </Link>
       <div id="header-button-div">
         <Link to="/">
           <button className="every-button green-button">Find Quiz</button>

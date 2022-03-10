@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuiz, patchQuiz, dateSlicer, simplify } from "../Utils/utils";
 import { Quiz, Question } from "..//Types/quiz.interface";
+import { QuizBox } from "./QuizBox";
 
 export const PlayQuiz: React.FC = () => {
+  // Creating an empty quiz object to use as starting
+  // value for quiz state, to avoid typescript errors
   const emptyQuiz: Quiz = {
     title: "",
     category: "",
@@ -19,14 +22,26 @@ export const PlayQuiz: React.FC = () => {
     questions: [{ _id: "", question: "", correct: "", accepted: [] }],
   };
 
-  const { quizId } = useParams();
+  // Creating a state which is initially the empty quiz,
+  // but updated with the quiz if received from API
   const [quiz, setQuiz] = useState<Quiz>(emptyQuiz);
+
+  // Creating a state which can be changed if the API
+  // has found no quiz with that id in the database
   const [notFound, setNotFound] = useState<boolean>(false);
 
-  const [started, setStarted] = useState(false);
-  const [ended, setEnded] = useState(false);
+  // Creating states to monitor start and end of play
+  const [started, setStarted] = useState<boolean>(false);
+  const [ended, setEnded] = useState<boolean>(false);
+
+  // Creating a state, an array of question objects which
+  // is updated every time another question is answered
   const [guessed, setGuessed] = useState<Question[]>([]);
 
+  // Fetching the quiz data using id from params,
+  // then setting the quiz state to that valid
+  // response, or setting the notFound state to true
+  const { quizId } = useParams();
   useEffect(() => {
     setNotFound(false);
     setStarted(false);
@@ -41,6 +56,9 @@ export const PlayQuiz: React.FC = () => {
       });
   }, [quizId]);
 
+  // Creating a function which changes ended state
+  // to true and patches the quiz with the new
+  // number of plays and the new average score
   const endQuiz = (done: boolean = false) => {
     setEnded(true);
     const newPlays: number = quiz.plays + 1;
@@ -49,6 +67,10 @@ export const PlayQuiz: React.FC = () => {
     if (quizId) patchQuiz(quizId, newPlays, Math.round(newAverage));
   };
 
+  // Creating a function which adds any question
+  // to the guessed state array if it's correct
+  // answer or any of its accepted answers
+  // matches the currect value of the text input
   const evaluateText = (e: { target: { value: string } }) => {
     const text = e.target.value;
     const array = [...guessed];
@@ -69,26 +91,35 @@ export const PlayQuiz: React.FC = () => {
     setGuessed(array);
   };
 
+  // Render this if waiting for API response
+  if (quiz.title === "") {
+    return <h1>Loading...</h1>;
+  }
+
+  // Render this if API found no quiz with id
   if (notFound) {
     return <h1>Quiz not found</h1>;
   }
 
+  // Otherwise, render the playable quiz
   return (
     <div id="play-quiz-page">
       <div id="play-quiz-div">
-        {/* If quiz has not yet started OR already ended */}
-        {quiz.title === "" ? null : !started || ended ? (
-          <div>
-            <h1>{quiz.title}</h1>
-            <p>
-              By <strong>{quiz.creator}</strong> -{" "}
-              <em>{dateSlicer(quiz.created)}</em> - {quiz.plays}{" "}
-              {quiz.plays === 1 ? "play" : "plays"}
-            </p>
-          </div>
+        {/* If quiz has not started yet OR already ended */}
+        {quiz.title !== "" ? (
+          !started || ended ? (
+            <div>
+              <h1>{quiz.title}</h1>
+              <p>
+                By <strong>{quiz.creator}</strong> -{" "}
+                <em>{dateSlicer(quiz.created)}</em> - {quiz.plays}{" "}
+                {quiz.plays === 1 ? "play" : "plays"}
+              </p>
+            </div>
+          ) : null
         ) : null}
 
-        {/* Only if quiz has not yet started */}
+        {/* Only if quiz has not started yet */}
         {quiz.title !== "" && !started ? (
           <div>
             {quiz.instructions.length ? (
@@ -146,37 +177,14 @@ export const PlayQuiz: React.FC = () => {
           </div>
         ) : null}
 
-        {/* Quiz always displayed once retrieved from API */}
-        {quiz.title !== "" ? (
-          <div id="quiz-questions-div">
-            {quiz.questions.map((question) => {
-              return (
-                <div className="quiz-whole-row" key={question.question}>
-                  <div className="quiz-question-box quiz-half-row">
-                    <p className="quiz-question quiz-box-text">
-                      {question.question}
-                    </p>
-                  </div>
-                  {guessed.indexOf(question) > -1 ? (
-                    <div className="correct-answer-box quiz-half-row">
-                      <p className="correct-answer quiz-box-text">
-                        {question.correct}
-                      </p>
-                    </div>
-                  ) : ended ? (
-                    <div className="incorrect-answer-box quiz-half-row">
-                      <p className="incorrect-answer quiz-box-text">
-                        {question.correct}
-                      </p>
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <h1>Loading...</h1>
-        )}
+        {/* Quiz is always displayed once found */}
+        <div id="quiz-questions-div">
+          {quiz.questions.map((question) => {
+            return (
+              <QuizBox question={question} guessed={guessed} ended={ended} />
+            );
+          })}
+        </div>
       </div>
     </div>
   );

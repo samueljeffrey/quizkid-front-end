@@ -5,14 +5,18 @@ import { SingleQuiz } from "./SingleQuiz";
 import { getQuizzes, allCategories } from "../Utils/utils";
 
 export const QuizList: React.FC = () => {
+  // Creating a state for array of fetched quizzes
   const [quizzes, setQuizzes] = useState<Quiz[]>();
 
+  // Creating a state for selected category
   const [category, setCategory] = useState("All");
 
+  // Setting category to "All" on loading of page
   useEffect(() => {
     setCategory("All");
   }, []);
 
+  // Fetching quizzes filtered by category chosen
   useEffect(() => {
     getQuizzes(category).then((response) => {
       setQuizzes(response.data);
@@ -21,6 +25,7 @@ export const QuizList: React.FC = () => {
 
   return (
     <div>
+      {/* Category selector is always at the top */}
       <select value={category} className="every-button category-selector">
         <option onClick={() => setCategory("All")}>All</option>
         {allCategories.map((category) => {
@@ -31,7 +36,12 @@ export const QuizList: React.FC = () => {
           );
         })}
       </select>
+
+      {/* Title depends on the chosen category */}
       <h1>{category} Quizzes</h1>
+
+      {/* Render loading message, then either a list */}
+      {/* of quizzes, or a message if none found */}
       {!quizzes ? (
         <p>Loading...</p>
       ) : quizzes.length === 0 ? (
