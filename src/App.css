@@ -105,7 +105,7 @@
 }
 
 #instructions-div {
-  line-height: 0.5;
+  padding-bottom: 15px;
 }
 
 .end-percentages {
@@ -236,11 +236,8 @@
   margin: 4px auto;
 }
 
-.remove-button-div {
-  margin-top: 10px;
-}
-
 .remove-button {
+  margin-top: 10px;
   width: 150px;
 }
 

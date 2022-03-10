@@ -40,20 +40,6 @@ export const CreateQuiz: React.FC = () => {
   // successfully posted quiz returned by the API
   const [uploaded, setUploaded] = useState<Quiz>();
 
-  // Declaring 3 functions which edit their respective states
-  // instantly according to all changes in the user's input
-  const editTitle = (text: string) => {
-    setTitle(text);
-  };
-  const editCreator = (text: string) => {
-    setCreator(text);
-  };
-  const editInstructions = (text: string, index: number) => {
-    const array = [...instructions];
-    array[index] = text;
-    setInstructions(array);
-  };
-
   // Declaring function which adds an empty
   // question, each time with the correct index
   const addQuestion = () => {
@@ -190,7 +176,7 @@ export const CreateQuiz: React.FC = () => {
                   : "details-inputs"
               }
               //
-              onChange={(e) => editTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
@@ -205,7 +191,7 @@ export const CreateQuiz: React.FC = () => {
                   ? "details-inputs red-input"
                   : "details-inputs"
               }
-              onChange={(e) => editCreator(e.target.value)}
+              onChange={(e) => setCreator(e.target.value)}
             />
           </div>
 
@@ -225,6 +211,7 @@ export const CreateQuiz: React.FC = () => {
               }}
             >
               <option value="Select">Select</option>
+              {/* Creating options from imported categories */}
               {allCategories.map((category) => {
                 return <option value={category}>{category}</option>;
               })}
@@ -233,22 +220,20 @@ export const CreateQuiz: React.FC = () => {
 
           <div id="instructions-div">
             <h3 className="input-labels">Instructions:</h3>
-            <input
-              className="details-inputs instructions-inputs"
-              onChange={(e) => editInstructions(e.target.value, 0)}
-            />
-            <input
-              className="details-inputs instructions-inputs"
-              onChange={(e) => editInstructions(e.target.value, 1)}
-            />
-            <input
-              className="details-inputs instructions-inputs"
-              onChange={(e) => editInstructions(e.target.value, 2)}
-            />
-            <input
-              className="details-inputs instructions-inputs"
-              onChange={(e) => editInstructions(e.target.value, 3)}
-            />
+            {/* Creating 4 instructions input fields, but */}
+            {/* never rendered in red as they aren't required */}
+            {oneToTen.slice(0, 4).map((item) => {
+              return (
+                <input
+                  className="details-inputs instructions-inputs"
+                  onChange={(e) => {
+                    const array = [...instructions];
+                    array[parseInt(item) - 1] = e.target.value;
+                    setInstructions(array);
+                  }}
+                />
+              );
+            })}
           </div>
 
           <div>
@@ -267,6 +252,7 @@ export const CreateQuiz: React.FC = () => {
               }}
             >
               <option value="0">Select</option>
+              {/* Creating options from imported numbers */}
               {oneToTen.map((num) => {
                 return (
                   <option value={num}>
@@ -281,46 +267,45 @@ export const CreateQuiz: React.FC = () => {
         <div>
           <h3 className="input-labels">Questions:</h3>
           <div id="quiz-questions-div">
+            {/* Mapping through objects in questions state */}
             {questions.map((item) => {
               return (
                 <div className="create-question-outer">
                   <div className="create-question-box">
                     <h3 className="input-labels">{item.index + 1}.</h3>
                     <p className="input-labels">Question:</p>
-                    {attempted && item.question === "" ? (
-                      <input
-                        className="details-inputs red-input"
-                        onChange={(e) =>
-                          editQuestion(e.target.value, item.index, "question")
-                        }
-                      />
-                    ) : (
-                      <input
-                        className="details-inputs"
-                        onChange={(e) =>
-                          editQuestion(e.target.value, item.index, "question")
-                        }
-                      />
-                    )}
+                    {/* If the user attempted to create the quiz */}
+                    {/* and any "question" field is empty, it will */}
+                    {/* be rendered in red, until no longer empty */}
+                    <input
+                      className={
+                        attempted && item.question === ""
+                          ? "details-inputs red-input"
+                          : "details-inputs"
+                      }
+                      onChange={(e) =>
+                        editQuestion(e.target.value, item.index, "question")
+                      }
+                    />
 
                     <p className="input-labels">Correct:</p>
-                    {attempted && item.correct === "" ? (
-                      <input
-                        className="details-inputs red-input"
-                        onChange={(e) =>
-                          editQuestion(e.target.value, item.index, "correct")
-                        }
-                      />
-                    ) : (
-                      <input
-                        className="details-inputs"
-                        onChange={(e) =>
-                          editQuestion(e.target.value, item.index, "correct")
-                        }
-                      />
-                    )}
+                    {/* If the user attempted to create the quiz */}
+                    {/* and any "correct" field is empty, it will */}
+                    {/* be rendered in red, until no longer empty */}
+                    <input
+                      className={
+                        attempted && item.correct === ""
+                          ? "details-inputs red-input"
+                          : "details-inputs"
+                      }
+                      onChange={(e) =>
+                        editQuestion(e.target.value, item.index, "correct")
+                      }
+                    />
 
                     <p className="input-labels">Accepted:</p>
+                    {/* Creating 3 accepted answer input fields, but */}
+                    {/* never rendered in red as they aren't required */}
                     {item.accepted.map((eachAccepted) => {
                       return (
                         <input
@@ -336,32 +321,34 @@ export const CreateQuiz: React.FC = () => {
                       );
                     })}
 
-                    <div className="remove-button-div">
-                      <button
-                        className="every-button red-button remove-button"
-                        onClick={() => deleteQuestion(item.index)}
-                      >
-                        Remove Question
-                      </button>
-                    </div>
+                    <button
+                      className="every-button red-button remove-button"
+                      onClick={() => deleteQuestion(item.index)}
+                    >
+                      Remove Question
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
+          {/* If the used pressed "create quiz" but there */}
+          {/* were errors, this message will be displayed */}
           {attempted ? (
-            <div>
-              <p className="input-labels bottom-error">
-                Please complete the red fields above.
-              </p>
-            </div>
+            <p className="input-labels bottom-error">
+              Please complete the red fields above.
+            </p>
           ) : null}
+
           <button
             className="every-button add-button"
             onClick={() => addQuestion()}
           >
             Add Question
           </button>
+
+          {/* Show "create quiz" button as long as the */}
+          {/* user has entered at least one question */}
           {questions.length ? (
             <button
               className="every-button green-button create-button"
@@ -376,10 +363,10 @@ export const CreateQuiz: React.FC = () => {
       </div>
     );
   } else {
-    // If the "create button" has been pressed and
-    // no errors found, the main create page will
-    // disappear and be replaced by either a loading
-    // message, or a link to the newly posted quiz
+    // If the "create button" has been pressed and no
+    // errors found, the main create page will disappear
+    // and be replaced by the "sending..." message, and
+    // then by the link to the newly posted quiz
     return (
       <div>
         {uploaded === undefined ? (
