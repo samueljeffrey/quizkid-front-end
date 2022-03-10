@@ -1,36 +1,47 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { postQuiz } from "../Utils/utils";
-import { Quiz } from "../Types/quiz.interface";
-
-interface Question {
-  index: number;
-  question: string;
-  correct: string;
-  accepted: string[];
-}
+import { postQuiz, allCategories, oneToTen } from "../Utils/utils";
+import { Quiz, NewQuiz, Question, NewQuestion } from "../Types/quiz.interface";
+import { QuizTips } from "./QuizTips";
 
 export const CreateQuiz: React.FC = () => {
-  const emptyQuestion: Question = {
+  // Creating an empty question, fitting the interface,
+  // for whenever a new question is added by the player
+  const emptyQuestion: NewQuestion = {
     index: 0,
     question: "",
     correct: "",
-    accepted: ["", "", "", ""],
+    accepted: [
+      { index: 0, text: "" },
+      { index: 1, text: "" },
+      { index: 2, text: "" },
+    ],
   };
 
-  const [questions, setQuestions] = useState<Question[]>([]);
+  // Creating states which will eventually be used
+  // to create the request body for the API
+  const [questions, setQuestions] = useState<NewQuestion[]>([]);
   const [instructions, setInstructions] = useState<string[]>(["", "", "", ""]);
   const [title, setTitle] = useState<string>("");
   const [creator, setCreator] = useState<string>("");
   const [category, setCategory] = useState<string>("Select");
   const [seconds, setSeconds] = useState<number>(0);
 
+  // Creating a state with a boolean which becomes
+  // true if the user has pressed "create quiz"
+  // button but not all required fields are filled
   const [attempted, setAttempted] = useState<boolean>(false);
 
+  // Create a state with a boolean which becomes
+  // true if the quiz is valid and being posted
   const [built, setBuilt] = useState<boolean>(false);
 
+  // Create a state which becomes the value of the
+  // successfully posted quiz returned by the API
   const [uploaded, setUploaded] = useState<Quiz>();
 
+  // Declaring 3 functions which edit their respective states
+  // instantly according to all changes in the user's input
   const editTitle = (text: string) => {
     setTitle(text);
   };
@@ -42,11 +53,18 @@ export const CreateQuiz: React.FC = () => {
     array[index] = text;
     setInstructions(array);
   };
+
+  // Declaring function which adds an empty
+  // question, each time with the correct index
   const addQuestion = () => {
-    const newQuestion: Question = emptyQuestion;
+    const newQuestion: NewQuestion = emptyQuestion;
     newQuestion.index = questions.length;
     setQuestions([...questions, newQuestion]);
   };
+
+  // Declaring a function which removes a given question
+  // from the array, and changes every other question's
+  // "index" property accordingly, then updates the state
   const deleteQuestion = (index: number) => {
     const list = [...questions];
     list.splice(index, 1);
@@ -55,209 +73,164 @@ export const CreateQuiz: React.FC = () => {
     }
     setQuestions(list);
   };
+
+  // Declaring a function which is responsible for
+  // updating the whole questions state upon every
+  // single change in any fields in any of the questions
   const editQuestion = (text: string, index: number, part: string) => {
     const newQuestions = [...questions];
     if (part === "question") newQuestions[index].question = text;
     if (part === "correct") newQuestions[index].correct = text;
-    if (part === "accepted0") newQuestions[index].accepted[0] = text;
-    if (part === "accepted1") newQuestions[index].accepted[1] = text;
-    if (part === "accepted2") newQuestions[index].accepted[2] = text;
-    if (part === "accepted3") newQuestions[index].accepted[3] = text;
+    if (part.slice(0, 8) === "accepted")
+      newQuestions[index].accepted[parseInt(part.slice(8))].text = text;
     setQuestions(newQuestions);
   };
 
-  const evaluateQuiz = () => {
-    setAttempted(false);
-    const errors = [];
-    if (title === "") {
-      errors.push("title");
-    }
-    if (creator === "") {
-      errors.push("creator");
-    }
-    if (category === "Select") {
-      errors.push("category");
-    }
-    if (seconds === 0) {
-      errors.push("seconds");
-    }
-    for (let i = 0; i < questions.length; i++) {
-      if (questions[i].question === "") {
-        if (errors.indexOf("question") === -1) {
-          errors.push("question");
-        }
-      }
-      if (questions[i].correct === "") {
-        if (errors.indexOf("correct") === -1) {
-          errors.push("correct");
-        }
-      }
-    }
-    setAttempted(true);
-    if (errors.length === 0) {
-      setBuilt(true);
-      setAttempted(false);
-      buildQuiz();
-    } else {
-      setAttempted(true);
-      setBuilt(false);
-    }
-  };
-
+  // Declaring the important function which actually
+  // creates and object which will fit the interface
+  // "NewQuiz" required by the postQuiz util function,
+  // in order to be sent to the database via the API.
   const buildQuiz = () => {
-    const object = {
+    const requestObject: NewQuiz = {
       title,
       creator,
       category,
       instructions,
       seconds,
-      questions,
+      questions: [{ question: "", correct: "", accepted: [] }],
     };
-    object.instructions = object.instructions.filter((item) => item !== "");
+
+    // Simplify object sent to the database by removing
+    // unused instructions/accepted answer fields
+    requestObject.instructions = requestObject.instructions.filter(
+      (item) => item !== ""
+    );
+
+    // Change all accepted answer objects to just strings
+    const formattedQuestions: Question[] = [];
+
     questions.forEach((question) => {
-      question.accepted = question.accepted.filter((item) => item !== "");
+      const editedQuestion: Question = {
+        question: question.question,
+        correct: question.correct,
+        accepted: [],
+      };
+      question.accepted.forEach((item) => {
+        if (item.text !== "") editedQuestion.accepted.push(item.text);
+      });
+      formattedQuestions.push(editedQuestion);
     });
-    postQuiz(object).then((response) => {
+
+    requestObject.questions = formattedQuestions;
+    // Setting the uploaded state to the value
+    // of the quiz object returned by the API
+    postQuiz(requestObject).then((response) => {
       setUploaded(response.data.data);
     });
   };
 
+  // Declaring a function which, once called when a
+  // user presses the "create quiz" button, will
+  // check that all required fields are filled
+  const evaluateQuiz = () => {
+    setAttempted(false);
+
+    let invalid: boolean = false;
+
+    // Checking if the quiz title or creator name have
+    // been left empty, or if the category or time limit
+    // selector inputs have been left as the defaults
+    if (
+      title === "" ||
+      creator === "" ||
+      category === "Select" ||
+      seconds === 0
+    ) {
+      invalid = true;
+    }
+
+    // Checking if any question has an empty "question"
+    // or "correct" field
+    questions.forEach((question) => {
+      if (question.question === "" || question.correct === "") {
+        invalid = true;
+      }
+    });
+
+    // If all required fields were correctly filled,
+    // the quiz object will be assembled and a post
+    // request sent to the API. Otherwise, the attempted
+    // state will be set to true.
+    setAttempted(true);
+    if (invalid) {
+      setAttempted(true);
+    } else {
+      setBuilt(true);
+      buildQuiz();
+    }
+  };
+
+  // Up until the "create quiz" button has been pressed,
+  // without errors, the main create page is rendered
   if (!built) {
     return (
       <div id="build-quiz-page">
-        <div id="quiz-tips">
-          <h1>Create your Quiz</h1>
-          <p>
-            <strong>Title:</strong> Simply enter a title for your quiz.
-          </p>
-          <p>
-            <strong>Your Name:</strong> Let players know who created the quiz.
-          </p>
-          <p>
-            <strong>Category:</strong> Choose a category from the options.
-          </p>
-          <p>
-            <strong>Instructions:</strong> Instructions or pieces of extra
-            information will be given to players as bullet points. These could
-            be "surnames are enough for correct answers", for example. You can
-            add up to 4 instructions, or simply leave them empty.
-          </p>
-          <p>
-            <strong>Time Limit:</strong> Select a time limit for your quiz from
-            the options.
-          </p>
-          <p>
-            <strong>Questions List:</strong> You can add another question to
-            your quiz using the button below the last question. Or delete any
-            question from the list using the button at the bottom of that
-            question.
-          </p>
-          <p>
-            <strong>Question:</strong> For each question in the quiz, first fill
-            in the "question" field itself. If the title of your quiz indicates
-            that the quiz is more of a list than individual questions, for
-            example, if your quiz was titled "Name the last 10 UK Prime
-            Ministers", then the "question" field in each question could just be
-            a number (eg. 1), or instead, it could be a clue (eg. 1997-2007, if
-            the answer was Tony Blair).
-          </p>
-          <p>
-            <strong>Correct:</strong> Then, in the "correct" field, enter the
-            answer you want to be displayed in the quiz for that question.
-          </p>
-          <p>
-            <strong>Accepted:</strong> You may then add up to 4 "accepted"
-            answers, or leave them empty. You don't need to add the "correct"
-            answer here, as it is automatically accepted.
-          </p>
-          <p>
-            <strong>***</strong> The correct and accepted answers are actually
-            changed for the quiz itself, to remove all spaces and apostrophes,
-            and to change all letters to lower case. For example, if the correct
-            answer is "Philosopher's Stone", a player would actually be correct
-            with "Philosophers Stone", "philosopher's stone", or even
-            "philosophersstone". This also means that you don't need to add
-            variations of capitalised and uncapitalised answers to your
-            "accepted" answers lists, only answers with different spellings or
-            different words. The displayed answer in the quiz, once guessed,
-            will still appear exactly as you entered it in the "correct" field,
-            regardless of how the player entered their answer.
-          </p>
-        </div>
+        <QuizTips />
 
         <div id="quiz-details">
           <div>
             <h3 className="input-labels">Title:</h3>
-            {attempted && title === "" ? (
-              <input
-                className="details-inputs red-input"
-                onChange={(e) => editTitle(e.target.value)}
-              />
-            ) : (
-              <input
-                className="details-inputs"
-                onChange={(e) => editTitle(e.target.value)}
-              />
-            )}
+            {/* If the user attempted to create the quiz */}
+            {/* and the "title" field is empty, it will */}
+            {/* be rendered in red, until no longer empty */}
+            <input
+              className={
+                attempted && title === ""
+                  ? "details-inputs red-input"
+                  : "details-inputs"
+              }
+              //
+              onChange={(e) => editTitle(e.target.value)}
+            />
           </div>
+
           <div>
             <h3 className="input-labels">Your Name:</h3>
-            {attempted && creator === "" ? (
-              <input
-                className="details-inputs red-input"
-                onChange={(e) => editCreator(e.target.value)}
-              />
-            ) : (
-              <input
-                className="details-inputs"
-                onChange={(e) => editCreator(e.target.value)}
-              />
-            )}
+            {/* If the user attempted to create the quiz */}
+            {/* and the "your name" field is empty, it will */}
+            {/* be rendered in red, until no longer empty */}
+            <input
+              className={
+                attempted && creator === ""
+                  ? "details-inputs red-input"
+                  : "details-inputs"
+              }
+              onChange={(e) => editCreator(e.target.value)}
+            />
           </div>
+
           <div>
             <h3 className="input-labels">Category:</h3>
-            {attempted && category === "Select" ? (
-              <select
-                className="every-button create-selector red-selector"
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                }}
-              >
-                <option value="Select">Select</option>
-                <option value="Film/TV">Film/TV</option>
-                <option value="Geography">Geography</option>
-                <option value="History">History</option>
-                <option value="Languages">Languages</option>
-                <option value="Literature">Literature</option>
-                <option value="Maths">Maths</option>
-                <option value="Music">Music</option>
-                <option value="Science">Science</option>
-                <option value="Society">Society</option>
-                <option value="Sport">Sport</option>
-                <option value="Other">Other</option>
-              </select>
-            ) : (
-              <select
-                className="every-button create-selector"
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                }}
-              >
-                <option value="Select">Select</option>
-                <option value="Film/TV">Film/TV</option>
-                <option value="Geography">Geography</option>
-                <option value="History">History</option>
-                <option value="Languages">Languages</option>
-                <option value="Literature">Literature</option>
-                <option value="Maths">Maths</option>
-                <option value="Music">Music</option>
-                <option value="Science">Science</option>
-                <option value="Society">Society</option>
-                <option value="Sport">Sport</option>
-                <option value="Other">Other</option>
-              </select>
-            )}
+            {/* If the user attempted to create the quiz and */}
+            {/* the "category" field is set to default, it */}
+            {/* will be rendered in red, until no longer default */}
+            <select
+              className={
+                attempted && category === "Select"
+                  ? "every-button create-selector red-selector"
+                  : "every-button create-selector"
+              }
+              onChange={(e) => {
+                setCategory(e.target.value);
+              }}
+            >
+              <option value="Select">Select</option>
+              {allCategories.map((category) => {
+                return <option value={category}>{category}</option>;
+              })}
+            </select>
           </div>
+
           <div id="instructions-div">
             <h3 className="input-labels">Instructions:</h3>
             <input
@@ -277,47 +250,31 @@ export const CreateQuiz: React.FC = () => {
               onChange={(e) => editInstructions(e.target.value, 3)}
             />
           </div>
+
           <div>
             <h3 className="input-labels">Time Limit:</h3>
-            {attempted && seconds === 0 ? (
-              <select
-                className="every-button create-selector red-selector"
-                onChange={(e) => {
-                  setSeconds(60 * parseInt(e.target.value));
-                }}
-              >
-                <option value="0">Select</option>
-                <option value="1">1 min</option>
-                <option value="2">2 mins</option>
-                <option value="3">3 mins</option>
-                <option value="4">4 mins</option>
-                <option value="5">5 mins</option>
-                <option value="6">6 mins</option>
-                <option value="7">7 mins</option>
-                <option value="8">8 mins</option>
-                <option value="9">9 mins</option>
-                <option value="10">10 mins</option>
-              </select>
-            ) : (
-              <select
-                className="every-button create-selector"
-                onChange={(e) => {
-                  setSeconds(60 * parseInt(e.target.value));
-                }}
-              >
-                <option value="0">Select</option>
-                <option value="1">1 min</option>
-                <option value="2">2 mins</option>
-                <option value="3">3 mins</option>
-                <option value="4">4 mins</option>
-                <option value="5">5 mins</option>
-                <option value="6">6 mins</option>
-                <option value="7">7 mins</option>
-                <option value="8">8 mins</option>
-                <option value="9">9 mins</option>
-                <option value="10">10 mins</option>
-              </select>
-            )}
+            {/* If the user attempted to create the quiz and */}
+            {/* the "time limit" field is set to default, it */}
+            {/* will be rendered in red, until no longer default */}
+            <select
+              className={
+                attempted && seconds === 0
+                  ? "every-button create-selector red-selector"
+                  : "every-button create-selector"
+              }
+              onChange={(e) => {
+                setSeconds(60 * parseInt(e.target.value));
+              }}
+            >
+              <option value="0">Select</option>
+              {oneToTen.map((num) => {
+                return (
+                  <option value={num}>
+                    {num} {num === "1" ? "min" : "mins"}
+                  </option>
+                );
+              })}
+            </select>
           </div>
         </div>
 
@@ -364,30 +321,21 @@ export const CreateQuiz: React.FC = () => {
                     )}
 
                     <p className="input-labels">Accepted:</p>
-                    <input
-                      className="details-inputs accepted-input"
-                      onChange={(e) =>
-                        editQuestion(e.target.value, item.index, "accepted0")
-                      }
-                    />
-                    <input
-                      className="details-inputs accepted-input"
-                      onChange={(e) =>
-                        editQuestion(e.target.value, item.index, "accepted1")
-                      }
-                    />
-                    <input
-                      className="details-inputs accepted-input"
-                      onChange={(e) =>
-                        editQuestion(e.target.value, item.index, "accepted2")
-                      }
-                    />
-                    <input
-                      className="details-inputs accepted-input"
-                      onChange={(e) =>
-                        editQuestion(e.target.value, item.index, "accepted3")
-                      }
-                    />
+                    {item.accepted.map((eachAccepted) => {
+                      return (
+                        <input
+                          className="details.inputs accepted-input"
+                          onChange={(e) =>
+                            editQuestion(
+                              e.target.value,
+                              item.index,
+                              `accepted${eachAccepted.index}`
+                            )
+                          }
+                        />
+                      );
+                    })}
+
                     <div className="remove-button-div">
                       <button
                         className="every-button red-button remove-button"
@@ -428,6 +376,10 @@ export const CreateQuiz: React.FC = () => {
       </div>
     );
   } else {
+    // If the "create button" has been pressed and
+    // no errors found, the main create page will
+    // disappear and be replaced by either a loading
+    // message, or a link to the newly posted quiz
     return (
       <div>
         {uploaded === undefined ? (

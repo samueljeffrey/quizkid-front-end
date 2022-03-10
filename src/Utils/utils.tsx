@@ -45,3 +45,30 @@ export const dateSlicer = (date: string) => {
 export const simplify = (input: string) => {
   return input.toLowerCase().replaceAll(" ", "").replaceAll("'", "");
 };
+
+export const allCategories: string[] = [
+  "Film/TV",
+  "Geography",
+  "History",
+  "Languages",
+  "Literature",
+  "Maths",
+  "Music",
+  "Science",
+  "Society",
+  "Sport",
+  "Other",
+];
+
+export const oneToTen: string[] = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+];

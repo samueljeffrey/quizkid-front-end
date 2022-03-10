@@ -28,3 +28,10 @@ export interface Question {
   accepted: string[];
   _id?: string;
 }
+
+export interface NewQuestion {
+  index: number;
+  question: string;
+  correct: string;
+  accepted: { index: number; text: string }[];
+}

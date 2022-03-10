@@ -2,27 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Quiz } from "../Types/quiz.interface";
 import { SingleQuiz } from "./SingleQuiz";
-import { getQuizzes } from "../Utils/utils";
+import { getQuizzes, allCategories } from "../Utils/utils";
 
 export const QuizList: React.FC = () => {
   const [quizzes, setQuizzes] = useState<Quiz[]>();
 
   const [category, setCategory] = useState("All");
-
-  const categories: string[] = [
-    "All",
-    "Film/TV",
-    "Geography",
-    "History",
-    "Languages",
-    "Literature",
-    "Maths",
-    "Music",
-    "Science",
-    "Society",
-    "Sport",
-    "Other",
-  ];
 
   useEffect(() => {
     setCategory("All");
@@ -37,7 +22,8 @@ export const QuizList: React.FC = () => {
   return (
     <div>
       <select value={category} className="every-button category-selector">
-        {categories.map((category) => {
+        <option onClick={() => setCategory("All")}>All</option>
+        {allCategories.map((category) => {
           return (
             <option key={category} onClick={() => setCategory(category)}>
               {category}
