@@ -1,5 +1,3 @@
-/* UNIVERSAL */
-
 .App {
   text-align: center;
   min-height: 100vh;
@@ -8,6 +6,8 @@
   background-color: #5463ff;
   color: #121212;
 }
+
+/* UNIVERSAL */
 
 .every-button {
   font-size: 1rem;
@@ -64,6 +64,7 @@
 }
 
 .single-quiz-div {
+  max-width: 600px;
   margin: 10px auto;
 }
 
@@ -74,7 +75,6 @@
 /* SINGLE QUIZ */
 
 .single-quiz-box {
-  max-width: 600px;
   margin: auto;
   border: 1px solid #121212;
   border-radius: 2px;
