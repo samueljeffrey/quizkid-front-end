@@ -12,7 +12,10 @@ export const QuizPreview: React.FC<Props> = ({ questions }) => {
         <h2>Preview:</h2>
         {questions.map((question) => {
           return (
-            <div className="quiz-whole-row" key={question.question}>
+            <div
+              className="quiz-whole-row"
+              key={`preview-${question.question}`}
+            >
               {/* Each question is rendered in yellow in preview, */}
               {/* or in red if input field is currently empty */}
               <div

@@ -6,6 +6,11 @@ import { QuizTips } from "./QuizTips";
 import { QuizPreview } from "./QuizPreview";
 import { QuestionBox } from "./QuestionBox";
 
+interface Instruction {
+  text: string;
+  index: number;
+}
+
 export const CreateQuiz: React.FC = () => {
   // Creating an empty question, fitting the interface,
   // for whenever a new question is added by the player
@@ -19,7 +24,7 @@ export const CreateQuiz: React.FC = () => {
   // Creating states which will eventually be used
   // to create the request body for the API
   const [questions, setQuestions] = useState<NewQuestion[]>([]);
-  const [instructions, setInstructions] = useState<string[]>([]);
+  const [instructions, setInstructions] = useState<Instruction[]>([]);
   const [title, setTitle] = useState<string>("");
   const [creator, setCreator] = useState<string>("");
   const [category, setCategory] = useState<string>("Select");
@@ -41,7 +46,10 @@ export const CreateQuiz: React.FC = () => {
   // Declaring function which adds an empty
   // instruction, each time with the correct index
   const addInstruction = () => {
-    setInstructions([...instructions, ""]);
+    setInstructions([
+      ...instructions,
+      { text: "", index: instructions.length },
+    ]);
   };
 
   // Declaring function which adds an empty
@@ -96,7 +104,7 @@ export const CreateQuiz: React.FC = () => {
       title,
       creator,
       category,
-      instructions,
+      instructions: [""],
       seconds,
       questions: [{ question: "", correct: "", accepted: [] }],
     };
@@ -105,6 +113,12 @@ export const CreateQuiz: React.FC = () => {
     requestObject.instructions = requestObject.instructions.filter(
       (item) => item !== ""
     );
+    // Change all instructions objects to just strings
+    const formattedInstructions: string[] = [];
+    instructions.forEach((instruction) => {
+      formattedInstructions.push(instruction.text);
+    });
+    requestObject.instructions = formattedInstructions;
     // Change all accepted answer objects to just strings
     const formattedQuestions: Question[] = [];
     questions.forEach((question) => {
@@ -219,7 +233,11 @@ export const CreateQuiz: React.FC = () => {
               <option value="Select">Select</option>
               {/* Creating options from imported categories */}
               {allCategories.map((category) => {
-                return <option value={category}>{category}</option>;
+                return (
+                  <option key={`categories-${category}`} value={category}>
+                    {category}
+                  </option>
+                );
               })}
             </select>
           </div>
@@ -234,7 +252,8 @@ export const CreateQuiz: React.FC = () => {
                   className="details-inputs instructions-inputs"
                   onChange={(e) => {
                     const array = [...instructions];
-                    array[parseInt(instruction) - 1] = e.target.value;
+                    array[instruction.index].text = e.target.value;
+                    console.log(array);
                     setInstructions(array);
                   }}
                 />
@@ -269,7 +288,7 @@ export const CreateQuiz: React.FC = () => {
               {/* Creating options from imported numbers */}
               {oneToTen.map((num) => {
                 return (
-                  <option value={num}>
+                  <option key={num} value={num}>
                     {num} {num === "1" ? "min" : "mins"}
                   </option>
                 );
@@ -290,6 +309,7 @@ export const CreateQuiz: React.FC = () => {
                   editQuestion={editQuestion}
                   deleteQuestion={deleteQuestion}
                   addAccepted={addAccepted}
+                  key={`box-${item.index}`}
                 />
               );
             })}

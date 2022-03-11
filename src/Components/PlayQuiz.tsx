@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuiz, patchQuiz, dateSlicer, simplify } from "../Utils/utils";
 import { Quiz, Question } from "..//Types/quiz.interface";
-import { QuizBox } from "./QuizBox";
+import { QuizRow } from "./QuizRow";
 
 export const PlayQuiz: React.FC = () => {
   // Creating an empty quiz object to use as starting
@@ -111,7 +111,8 @@ export const PlayQuiz: React.FC = () => {
             <h1>{quiz.title}</h1>
             <p>
               By <strong>{quiz.creator}</strong> -{" "}
-              <em>{dateSlicer(quiz.created)}</em> - {quiz.plays}{" "}
+              <em>{dateSlicer(quiz.created)}</em> -{" "}
+              {ended ? quiz.plays + 1 : quiz.plays}{" "}
               {quiz.plays === 1 ? "play" : "plays"}
             </p>
           </div>
@@ -146,7 +147,9 @@ export const PlayQuiz: React.FC = () => {
               Score:{" "}
               {Math.round((guessed.length / quiz.questions.length) * 100)}%
             </h2>
-            <h3 className="end-percentages">Average: {quiz.average}%</h3>
+            <h3 className="end-percentages">
+              <span className="grey-text">Average: {quiz.average}%</span>
+            </h3>
           </div>
         ) : null}
 
@@ -175,10 +178,10 @@ export const PlayQuiz: React.FC = () => {
         ) : null}
 
         {/* Quiz is always displayed once found */}
-        <div id="quiz-questions-div">
+        <div id="quiz-rows-div">
           {quiz.questions.map((question) => {
             return (
-              <QuizBox question={question} guessed={guessed} ended={ended} />
+              <QuizRow question={question} guessed={guessed} ended={ended} />
             );
           })}
         </div>

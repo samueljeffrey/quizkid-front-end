@@ -7,7 +7,7 @@ interface Props {
   ended: boolean;
 }
 
-export const QuizBox: React.FC<Props> = ({ question, guessed, ended }) => {
+export const QuizRow: React.FC<Props> = ({ question, guessed, ended }) => {
   return (
     <div className="quiz-whole-row" key={question.question}>
       <div className="quiz-question-box quiz-half-row">
