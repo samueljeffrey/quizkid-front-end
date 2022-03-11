@@ -1,46 +1,69 @@
-# Getting Started with Create React App
+# My Quizkid React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+This project has been to develop a front end app for a quiz website, with its functionality facilitated by my own backend API, which I built prior to this.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Try the React App
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### The hosted React App can be found here: https://samuel-jeffrey-quizkid.netlify.app/.
 
-### `npm test`
+#### The API which I created and used for this project is found here: https://samueljeffrey-quizkid.herokuapp.com/api. Its Github repository can be found here: https://github.com/samueljeffrey/samueljeffrey-quizkid.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Check out the project for yourself
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. Clone the repository
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+In your terminal, when in your chosen directory, run the following command:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```http
+git clone https://github.com/samueljeffrey/quizkid-front-end.git
+```
 
-### `npm run eject`
+Once cloned, enter the new directory and open it in your editor, via the following commands in the terminal:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```http
+cd quizkid-front-end
+code .
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 2. Install dependencies
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You'll first need to make sure that your code editor has a minimum of Node version v16.0.0 installed. In order to install react, which enables you to run the project from a local server within your computer, type the following commands into your code editor's terminal:
 
-## Learn More
+```http
+npm install
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 3. Try the app
+
+To run and use the app with all its functionality, from a local server, simply run the following command in your computer:
+
+```http
+npm start
+```
+
+A new window will open up and you can explore the app from there.
+
+The app has the following functionality:
+
+- Users can view a list of quizzes to play on the homepage, sorted by most recent first, and can also filter by category.
+- Upon clicking on a quiz from the list, users are navigated to its page, where the basic details and instructions are shown.
+- When pressing play, the text input field, current score and give up button are displayed, with the quiz table below.
+- Users type text into the input field and upon a match to any accepted answer for any question, the text disappears and the question's answer is shown in green in the quiz table below.
+- The quiz ends either when the timer reaches zero, or when the user presses the give up button. The user's score is then shown, along with the average score for that quiz, and a patch request is made, which increment the number of plays and sets the new average score.
+- Users can also navigate to the create page through the header. Here, a detailed list of instructions is first displayed.
+- The user can enter the main details for the quiz, and then add up to 100 questions with multiple accepted answers.
+- As long as all required fields are filled, including in all added questions, the create quiz button will trigger a post request to the API with the quiz information, and upon receiving the response, the page will show a button with a link to the newly posted quiz.
+
+#### Thanks for having a look at my React App
