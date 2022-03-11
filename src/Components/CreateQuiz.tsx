@@ -118,7 +118,6 @@ export const CreateQuiz: React.FC = () => {
     requestObject.instructions = requestObject.instructions.filter(
       (item) => item !== ""
     );
-    requestObject.instructions = formattedInstructions;
     // Change all accepted answer objects to just strings
     const formattedQuestions: Question[] = [];
     questions.forEach((question) => {
