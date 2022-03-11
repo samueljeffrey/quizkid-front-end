@@ -108,16 +108,16 @@ export const CreateQuiz: React.FC = () => {
       seconds,
       questions: [{ question: "", correct: "", accepted: [] }],
     };
-    // Simplify object sent to the database by removing
-    // unused instructions/accepted answer fields
-    requestObject.instructions = requestObject.instructions.filter(
-      (item) => item !== ""
-    );
     // Change all instructions objects to just strings
     const formattedInstructions: string[] = [];
     instructions.forEach((instruction) => {
       formattedInstructions.push(instruction.text);
     });
+    // Simplify object sent to the database by removing
+    // unused instructions/accepted answer fields
+    requestObject.instructions = requestObject.instructions.filter(
+      (item) => item !== ""
+    );
     requestObject.instructions = formattedInstructions;
     // Change all accepted answer objects to just strings
     const formattedQuestions: Question[] = [];
