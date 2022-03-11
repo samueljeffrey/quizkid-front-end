@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { postQuiz, allCategories, oneToTen } from "../Utils/utils";
 import { Quiz, NewQuiz, Question, NewQuestion } from "../Types/quiz.interface";
 import { QuizTips } from "./QuizTips";
+import { QuizPreview } from "./QuizPreview";
 
 export const CreateQuiz: React.FC = () => {
   // Creating an empty question, fitting the interface,
@@ -272,7 +273,7 @@ export const CreateQuiz: React.FC = () => {
               return (
                 <div className="create-question-outer">
                   <div className="create-question-box">
-                    <h3 className="input-labels">{item.index + 1}.</h3>
+                    <h2 className="input-labels">{item.index + 1}.</h2>
                     <p className="input-labels">Question:</p>
                     {/* If the user attempted to create the quiz */}
                     {/* and any "question" field is empty, it will */}
@@ -286,6 +287,7 @@ export const CreateQuiz: React.FC = () => {
                       onChange={(e) =>
                         editQuestion(e.target.value, item.index, "question")
                       }
+                      value={item.question}
                     />
 
                     <p className="input-labels">Correct:</p>
@@ -301,6 +303,7 @@ export const CreateQuiz: React.FC = () => {
                       onChange={(e) =>
                         editQuestion(e.target.value, item.index, "correct")
                       }
+                      value={item.correct}
                     />
 
                     <p className="input-labels">Accepted:</p>
@@ -317,6 +320,7 @@ export const CreateQuiz: React.FC = () => {
                               `accepted${eachAccepted.index}`
                             )
                           }
+                          value={item.accepted[eachAccepted.index].text}
                         />
                       );
                     })}
@@ -325,41 +329,49 @@ export const CreateQuiz: React.FC = () => {
                       className="every-button red-button remove-button"
                       onClick={() => deleteQuestion(item.index)}
                     >
-                      Remove Question
+                      Remove
                     </button>
                   </div>
                 </div>
               );
             })}
           </div>
-          {/* If the used pressed "create quiz" but there */}
-          {/* were errors, this message will be displayed */}
-          {attempted ? (
-            <p className="input-labels bottom-error">
-              Please complete the red fields above.
-            </p>
-          ) : null}
 
-          <button
-            className="every-button add-button"
-            onClick={() => addQuestion()}
-          >
-            Add Question
-          </button>
-
-          {/* Show "create quiz" button as long as the */}
-          {/* user has entered at least one question */}
-          {questions.length ? (
+          {/* Only show add button if number of */}
+          {/* questions is below 100 */}
+          {questions.length < 100 ? (
             <button
-              className="every-button green-button create-button"
-              onClick={() => {
-                evaluateQuiz();
-              }}
+              className="every-button add-button"
+              onClick={() => addQuestion()}
             >
-              Create Quiz
+              Add Question
             </button>
           ) : null}
         </div>
+
+        {/* Show preview when at least 1 question */}
+        {questions.length ? <QuizPreview questions={questions} /> : null}
+
+        {/* If the used pressed "create quiz" but there */}
+        {/* were errors, this message will be displayed */}
+        {attempted ? (
+          <p className="input-labels bottom-error">
+            Please complete the red fields above.
+          </p>
+        ) : null}
+
+        {/* Show "create quiz" button as long as the */}
+        {/* user has entered at least one question */}
+        {questions.length ? (
+          <button
+            className="every-button green-button create-button"
+            onClick={() => {
+              evaluateQuiz();
+            }}
+          >
+            Create Quiz
+          </button>
+        ) : null}
       </div>
     );
   } else {

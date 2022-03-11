@@ -106,21 +106,18 @@ export const PlayQuiz: React.FC = () => {
     <div id="play-quiz-page">
       <div id="play-quiz-div">
         {/* If quiz has not started yet OR already ended */}
-        {quiz.title !== "" ? (
-          !started || ended ? (
-            <div>
-              <h1>{quiz.title}</h1>
-              <p>
-                By <strong>{quiz.creator}</strong> -{" "}
-                <em>{dateSlicer(quiz.created)}</em> - {quiz.plays}{" "}
-                {quiz.plays === 1 ? "play" : "plays"}
-              </p>
-            </div>
-          ) : null
+        {!started || ended ? (
+          <div>
+            <h1>{quiz.title}</h1>
+            <p>
+              By <strong>{quiz.creator}</strong> -{" "}
+              <em>{dateSlicer(quiz.created)}</em> - {quiz.plays}{" "}
+              {quiz.plays === 1 ? "play" : "plays"}
+            </p>
+          </div>
         ) : null}
-
         {/* Only if quiz has not started yet */}
-        {quiz.title !== "" && !started ? (
+        {!started ? (
           <div>
             {quiz.instructions.length ? (
               <div id="instructions-div">
