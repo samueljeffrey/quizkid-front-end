@@ -17,7 +17,7 @@ export const QuizTips: React.FC = () => {
         <strong>Instructions:</strong> Instructions or pieces of extra
         information will be given to players as bullet points. These could be
         "surnames are enough for correct answers", for example. You can add up
-        to 4 instructions, or simply leave them empty.
+        to 5 instructions.
       </p>
       <p>
         <strong>Time Limit:</strong> Select a time limit for your quiz from the
@@ -26,7 +26,8 @@ export const QuizTips: React.FC = () => {
       <p>
         <strong>Questions List:</strong> You can add another question to your
         quiz using the button below the last question. Or delete any question
-        from the list using the button at the bottom of that question.
+        from the list using the button at the bottom of that question. There is
+        a limit of 100 questions.
       </p>
       <p>
         <strong>Question:</strong> For each question in the quiz, first fill in
@@ -42,7 +43,7 @@ export const QuizTips: React.FC = () => {
         you want to be displayed in the quiz for that question.
       </p>
       <p>
-        <strong>Accepted:</strong> You may then add up to 3 "accepted" answers,
+        <strong>Accepted:</strong> You may then add up to 5 "accepted" answers,
         or leave them empty. You don't need to add the "correct" answer here, as
         it is automatically accepted.
       </p>

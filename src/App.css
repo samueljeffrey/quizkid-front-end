@@ -237,17 +237,25 @@
   border: #121212 solid 1px;
 }
 
+.add-answer-button {
+  background-color: #95cd41;
+  margin: 5px auto;
+  width: 125px;
+  display: block;
+}
+
 .remove-button {
   background-color: #444444;
   color: #ffffed;
   margin-top: 10px;
-  width: 80px;
+  width: 150px;
 }
 
-.add-button {
+.yellow-add-button {
   background-color: #f6d860;
-  margin: 10px 5px;
+  margin: 5px auto;
   width: 125px;
+  display: block;
 }
 
 .create-button {

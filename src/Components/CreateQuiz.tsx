@@ -4,6 +4,7 @@ import { postQuiz, allCategories, oneToTen } from "../Utils/utils";
 import { Quiz, NewQuiz, Question, NewQuestion } from "../Types/quiz.interface";
 import { QuizTips } from "./QuizTips";
 import { QuizPreview } from "./QuizPreview";
+import { QuestionBox } from "./QuestionBox";
 
 export const CreateQuiz: React.FC = () => {
   // Creating an empty question, fitting the interface,
@@ -12,17 +13,13 @@ export const CreateQuiz: React.FC = () => {
     index: 0,
     question: "",
     correct: "",
-    accepted: [
-      { index: 0, text: "" },
-      { index: 1, text: "" },
-      { index: 2, text: "" },
-    ],
+    accepted: [{ index: 0, text: "" }],
   };
 
   // Creating states which will eventually be used
   // to create the request body for the API
   const [questions, setQuestions] = useState<NewQuestion[]>([]);
-  const [instructions, setInstructions] = useState<string[]>(["", "", "", ""]);
+  const [instructions, setInstructions] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
   const [creator, setCreator] = useState<string>("");
   const [category, setCategory] = useState<string>("Select");
@@ -42,11 +39,28 @@ export const CreateQuiz: React.FC = () => {
   const [uploaded, setUploaded] = useState<Quiz>();
 
   // Declaring function which adds an empty
+  // instruction, each time with the correct index
+  const addInstruction = () => {
+    setInstructions([...instructions, ""]);
+  };
+
+  // Declaring function which adds an empty
   // question, each time with the correct index
   const addQuestion = () => {
     const newQuestion: NewQuestion = emptyQuestion;
     newQuestion.index = questions.length;
     setQuestions([...questions, newQuestion]);
+  };
+
+  // Declaring function which adds an empty accepted
+  // answer, each time with the correct index
+  const addAccepted = (question: number) => {
+    const array = [...questions];
+    questions[question].accepted.push({
+      index: questions[question].accepted.length,
+      text: "",
+    });
+    setQuestions(array);
   };
 
   // Declaring a function which removes a given question
@@ -86,16 +100,13 @@ export const CreateQuiz: React.FC = () => {
       seconds,
       questions: [{ question: "", correct: "", accepted: [] }],
     };
-
     // Simplify object sent to the database by removing
     // unused instructions/accepted answer fields
     requestObject.instructions = requestObject.instructions.filter(
       (item) => item !== ""
     );
-
     // Change all accepted answer objects to just strings
     const formattedQuestions: Question[] = [];
-
     questions.forEach((question) => {
       const editedQuestion: Question = {
         question: question.question,
@@ -107,7 +118,6 @@ export const CreateQuiz: React.FC = () => {
       });
       formattedQuestions.push(editedQuestion);
     });
-
     requestObject.questions = formattedQuestions;
     // Setting the uploaded state to the value
     // of the quiz object returned by the API
@@ -121,9 +131,7 @@ export const CreateQuiz: React.FC = () => {
   // check that all required fields are filled
   const evaluateQuiz = () => {
     setAttempted(false);
-
     let invalid: boolean = false;
-
     // Checking if the quiz title or creator name have
     // been left empty, or if the category or time limit
     // selector inputs have been left as the defaults
@@ -135,7 +143,6 @@ export const CreateQuiz: React.FC = () => {
     ) {
       invalid = true;
     }
-
     // Checking if any question has an empty "question"
     // or "correct" field
     questions.forEach((question) => {
@@ -143,7 +150,6 @@ export const CreateQuiz: React.FC = () => {
         invalid = true;
       }
     });
-
     // If all required fields were correctly filled,
     // the quiz object will be assembled and a post
     // request sent to the API. Otherwise, the attempted
@@ -176,7 +182,6 @@ export const CreateQuiz: React.FC = () => {
                   ? "details-inputs red-input"
                   : "details-inputs"
               }
-              //
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
@@ -223,18 +228,26 @@ export const CreateQuiz: React.FC = () => {
             <h3 className="input-labels">Instructions:</h3>
             {/* Creating 4 instructions input fields, but */}
             {/* never rendered in red as they aren't required */}
-            {oneToTen.slice(0, 4).map((item) => {
+            {instructions.map((instruction) => {
               return (
                 <input
                   className="details-inputs instructions-inputs"
                   onChange={(e) => {
                     const array = [...instructions];
-                    array[parseInt(item) - 1] = e.target.value;
+                    array[parseInt(instruction) - 1] = e.target.value;
                     setInstructions(array);
                   }}
                 />
               );
             })}
+            {instructions.length < 5 ? (
+              <button
+                className="every-button yellow-add-button"
+                onClick={() => addInstruction()}
+              >
+                Add Instruction
+              </button>
+            ) : null}
           </div>
 
           <div>
@@ -271,68 +284,13 @@ export const CreateQuiz: React.FC = () => {
             {/* Mapping through objects in questions state */}
             {questions.map((item) => {
               return (
-                <div className="create-question-outer">
-                  <div className="create-question-box">
-                    <h2 className="input-labels">{item.index + 1}.</h2>
-                    <p className="input-labels">Question:</p>
-                    {/* If the user attempted to create the quiz */}
-                    {/* and any "question" field is empty, it will */}
-                    {/* be rendered in red, until no longer empty */}
-                    <input
-                      className={
-                        attempted && item.question === ""
-                          ? "details-inputs red-input"
-                          : "details-inputs"
-                      }
-                      onChange={(e) =>
-                        editQuestion(e.target.value, item.index, "question")
-                      }
-                      value={item.question}
-                    />
-
-                    <p className="input-labels">Correct:</p>
-                    {/* If the user attempted to create the quiz */}
-                    {/* and any "correct" field is empty, it will */}
-                    {/* be rendered in red, until no longer empty */}
-                    <input
-                      className={
-                        attempted && item.correct === ""
-                          ? "details-inputs red-input"
-                          : "details-inputs"
-                      }
-                      onChange={(e) =>
-                        editQuestion(e.target.value, item.index, "correct")
-                      }
-                      value={item.correct}
-                    />
-
-                    <p className="input-labels">Accepted:</p>
-                    {/* Creating 3 accepted answer input fields, but */}
-                    {/* never rendered in red as they aren't required */}
-                    {item.accepted.map((eachAccepted) => {
-                      return (
-                        <input
-                          className="details.inputs accepted-input"
-                          onChange={(e) =>
-                            editQuestion(
-                              e.target.value,
-                              item.index,
-                              `accepted${eachAccepted.index}`
-                            )
-                          }
-                          value={item.accepted[eachAccepted.index].text}
-                        />
-                      );
-                    })}
-
-                    <button
-                      className="every-button red-button remove-button"
-                      onClick={() => deleteQuestion(item.index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
+                <QuestionBox
+                  item={item}
+                  attempted={attempted}
+                  editQuestion={editQuestion}
+                  deleteQuestion={deleteQuestion}
+                  addAccepted={addAccepted}
+                />
               );
             })}
           </div>
@@ -341,7 +299,7 @@ export const CreateQuiz: React.FC = () => {
           {/* questions is below 100 */}
           {questions.length < 100 ? (
             <button
-              className="every-button add-button"
+              className="every-button yellow-add-button"
               onClick={() => addQuestion()}
             >
               Add Question
